@@ -358,6 +358,14 @@
           const emailFromApi = data && data.user && data.user.email ? data.user.email : email;
           if (token) {
             localStorage.setItem(TOKEN_KEY, token);
+            try {
+              const me = await api("/me", { headers: { Authorization: "Bearer " + token } });
+              if (me && me.subscription) {
+                updateSubscriptionUI(me.subscription);
+              }
+            } catch {
+              // ignore
+            }
           }
           setStatus("Success! You are signed in.", "success");
           toggleSignedIn(emailFromApi);
