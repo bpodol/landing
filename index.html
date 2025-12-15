@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PLO Range Explorer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-api-base="https://auth-api-0krz.onrender.com">
+  <header class="hero">
+    <div class="container hero-content">
+      <div>
+        <p class="eyebrow">PLO4 / PLO5</p>
+        <h1>PLO RangeLab</h1>
+        <p class="lede">Equity, multi-street filters, and easy range study.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="#" id="signup">Get started</a>
+          <a class="btn ghost" href="D:\flopzilla plo\landing\downloads\PLO RangeLab_0.1.0_x64-setup.exe" id="download">Download app</a>
+        </div>
+        <p class="micro" id="auth-cta">Already have an account? <a href="#" id="login">Log in</a></p>
+        <div class="auth-user hidden" id="auth-user">
+          <span class="micro">Signed in as <strong id="user-email"></strong></span>
+          <button class="btn ghost" id="logout-btn">Log out</button>
+        </div>
+        <p class="status micro" id="cta-status"></p>
+      </div>
+      <div class="card highlight">
+        <h3>Built for PLO</h3>
+        <ul>
+          <li>PLO4 / PLO5 equity</li>
+          <li>Multi-street range filters</li>
+          <li>Simple range study</li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="grid features">
+      <div class="card">
+        <h3>Equity fast</h3>
+        <p>PLO4 / PLO5 equity sims without friction.</p>
+      </div>
+      <div class="card">
+        <h3>Range filters</h3>
+        <p>Stack filters across streets in seconds.</p>
+      </div>
+      <div class="card">
+        <h3>Study-friendly</h3>
+        <p>Save, load, and review ranges with one click.</p>
+      </div>
+    </section>
+
+    <section class="pricing card" id="pricing-section">
+      <div>
+        <p class="eyebrow">Simple pricing</p>
+        <h2>Pro</h2>
+        <p class="price">$15 / month</p>
+        <p class="lede">or $120 / year</p>
+        <a class="btn primary" href="#" id="choose-plan">Choose plan</a>
+      </div>
+      <ul>
+        <li>- PLO4 and PLO5 support</li>
+        <li>- Board-aware filters</li>
+        <li>- Saved ranges & presets</li>
+        <li>- Priority updates</li>
+      </ul>
+    </section>
+
+    <section class="pricing card hidden" id="subscription-section">
+      <div>
+        <p class="eyebrow">Your subscription</p>
+        <h2 id="sub-plan">Pro</h2>
+        <p class="price" id="sub-status">Active</p>
+        <p class="lede" id="sub-expiry">Expires soon</p>
+        <a class="btn primary hidden" href="#" id="upgrade-plan">Switch to yearly</a>
+      </div>
+      <ul>
+        <li>- PLO4 and PLO5 support</li>
+        <li>- Board-aware filters</li>
+        <li>- Saved ranges & presets</li>
+        <li>- Priority updates</li>
+      </ul>
+    </section>
+
+    <section class="steps">
+      <h3>How it works</h3>
+      <div class="grid">
+        <div class="card">
+          <p class="eyebrow">Step 1</p>
+          <p>Create your account and choose a plan.</p>
+        </div>
+        <div class="card">
+          <p class="eyebrow">Step 2</p>
+          <p>Download the app for your platform.</p>
+        </div>
+        <div class="card">
+          <p class="eyebrow">Step 3</p>
+          <p>Log in and start running equity and range filters.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <span>PLO Range Explorer</span>
+      <div class="micro">
+        <a href="#" id="support">Support</a>
+        <a href="#" id="privacy">Privacy</a>
+        <a href="#" id="terms">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal-backdrop" id="auth-modal" aria-hidden="true">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="auth-title">Create your account</h3>
+        <button class="icon-btn" id="auth-close" aria-label="Close auth modal">X</button>
+      </div>
+      <form id="auth-form">
+        <label class="field">
+          <span>Email</span>
+          <input type="email" id="auth-email" required placeholder="you@example.com">
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input type="password" id="auth-password" required placeholder="At least 8 characters">
+          <span class="micro">Min 8 characters, include a letter and a number.</span>
+        </label>
+        <label class="field">
+          <span>Confirm password</span>
+          <input type="password" id="auth-password-confirm" required placeholder="Re-enter your password">
+        </label>
+        <p class="status" id="auth-status"></p>
+        <button class="btn primary full" type="submit" id="auth-submit">Create account</button>
+        <p class="micro auth-switch">
+          <a href="#" id="switch-to-login">Log in instead</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="plan-modal" aria-hidden="true">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Select a plan</h3>
+        <button class="icon-btn" id="plan-close" aria-label="Close plan modal">X</button>
+      </div>
+      <div class="modal-body">
+        <div class="plan-options">
+          <button class="btn full" data-plan="monthly" id="plan-monthly">$15 / month</button>
+          <button class="btn full" data-plan="yearly" id="plan-yearly">$120 / year</button>
+        </div>
+        <p class="micro" id="plan-selected"></p>
+        <button class="btn primary full hidden" id="pay-btn" type="button">Pay</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const apiBase = window.AUTH_API_BASE || document.body.dataset.apiBase || "http://localhost:3000";
+      const TOKEN_KEY = "auth_token";
+      const modal = document.getElementById("auth-modal");
+      const form = document.getElementById("auth-form");
+      const emailInput = document.getElementById("auth-email");
+      const passwordInput = document.getElementById("auth-password");
+      const passwordConfirmInput = document.getElementById("auth-password-confirm");
+      const submitBtn = document.getElementById("auth-submit");
+      const titleEl = document.getElementById("auth-title");
+      const switchLink = document.getElementById("switch-to-login");
+      const statusEl = document.getElementById("auth-status");
+      const closeBtn = document.getElementById("auth-close");
+      const signupBtn = document.getElementById("signup");
+      const loginBtn = document.getElementById("login");
+      const planBtn = document.getElementById("choose-plan");
+      const authCta = document.getElementById("auth-cta");
+      const userRow = document.getElementById("auth-user");
+      const userEmail = document.getElementById("user-email");
+      const logoutBtn = document.getElementById("logout-btn");
+      const ctaStatus = document.getElementById("cta-status");
+      const planModal = document.getElementById("plan-modal");
+      const planClose = document.getElementById("plan-close");
+      const planMonthly = document.getElementById("plan-monthly");
+      const planYearly = document.getElementById("plan-yearly");
+      const planSelected = document.getElementById("plan-selected");
+      const payBtn = document.getElementById("pay-btn");
+
+      let mode = "signup";
+      let working = false;
+      let selectedPlan = "";
+
+      function passwordValid(pw) {
+        return pw && pw.length >= 8 && /[A-Za-z]/.test(pw) && /[0-9]/.test(pw);
+      }
+
+      function setStatus(message, kind) {
+        statusEl.textContent = message || "";
+        statusEl.dataset.kind = kind || "";
+        statusEl.classList.toggle("show", !!message);
+      }
+
+      function setCtaStatus(message, kind) {
+        ctaStatus.textContent = message || "";
+        ctaStatus.dataset.kind = kind || "";
+        ctaStatus.classList.toggle("show", !!message);
+      }
+
+      function setMode(next) {
+        mode = next === "login" ? "login" : "signup";
+        const isSignup = mode === "signup";
+        titleEl.textContent = isSignup ? "Create your account" : "Log in to your account";
+        submitBtn.textContent = isSignup ? "Create account" : "Log in";
+        switchLink.textContent = isSignup ? "Log in instead" : "Create an account instead";
+        switchLink.dataset.target = isSignup ? "login" : "signup";
+      }
+
+      function openModal(nextMode) {
+        setMode(nextMode);
+        setStatus("", "");
+        modal.classList.add("open");
+        modal.setAttribute("aria-hidden", "false");
+        setTimeout(() => emailInput.focus(), 50);
+      }
+
+      function closeModal() {
+        modal.classList.remove("open");
+        modal.setAttribute("aria-hidden", "true");
+      }
+
+      function openPlanModal() {
+        selectedPlan = "";
+        if (planSelected) planSelected.textContent = "";
+        if (payBtn) payBtn.classList.add("hidden");
+        planModal.classList.add("open");
+        planModal.setAttribute("aria-hidden", "false");
+      }
+
+      function closePlanModal() {
+        planModal.classList.remove("open");
+        planModal.setAttribute("aria-hidden", "true");
+      }
+
+      function toggleSignedIn(email) {
+        if (email) {
+          userEmail.textContent = email;
+          userRow.classList.remove("hidden");
+          authCta.classList.add("hidden");
+          if (signupBtn) signupBtn.classList.add("hidden");
+          setCtaStatus("You are signed in. Open the app to continue.", "success");
+        } else {
+          userRow.classList.add("hidden");
+          authCta.classList.remove("hidden");
+          if (signupBtn) signupBtn.classList.remove("hidden");
+          setCtaStatus("", "");
+        }
+      }
+
+      function updateSubscriptionUI(subscription) {
+        const pricing = document.getElementById("pricing-section");
+        const subSection = document.getElementById("subscription-section");
+        const subPlan = document.getElementById("sub-plan");
+        const subStatus = document.getElementById("sub-status");
+        const subExpiry = document.getElementById("sub-expiry");
+        const upgradeBtn = document.getElementById("upgrade-plan");
+
+        const isActive = subscription && subscription.plan && subscription.status === "active";
+        if (pricing) pricing.classList.toggle("hidden", !!isActive);
+        if (subSection) subSection.classList.toggle("hidden", !isActive);
+        if (!isActive) return;
+
+        const planLabel = subscription.plan === "yearly" ? "Pro Yearly" : "Pro Monthly";
+        if (subPlan) subPlan.textContent = planLabel;
+        if (subStatus) subStatus.textContent = "Active";
+        if (subExpiry && subscription.expires_at) {
+          const exp = new Date(subscription.expires_at).toLocaleDateString();
+          subExpiry.textContent = `Expires ${exp}`;
+        }
+
+        if (upgradeBtn) {
+          const showUpgrade = subscription.plan === "monthly";
+          upgradeBtn.classList.toggle("hidden", !showUpgrade);
+          upgradeBtn.onclick = (e) => {
+            e.preventDefault();
+            // preset selection to yearly and open plan modal
+            selectedPlan = "yearly";
+            [planMonthly, planYearly].forEach((b) => b && b.classList.remove("selected"));
+            if (planYearly) planYearly.classList.add("selected");
+            if (planSelected) planSelected.textContent = "Selected: $120 / year";
+            if (payBtn) payBtn.classList.remove("hidden");
+            openPlanModal();
+          };
+        }
+      }
+
+      async function api(path, options = {}) {
+        const res = await fetch(apiBase + path, options);
+        const text = await res.text();
+        let data = null;
+        try {
+          data = text ? JSON.parse(text) : null;
+        } catch {
+          data = null;
+        }
+        if (!res.ok) {
+          const msg = (data && (data.error || data.message)) || "Request failed";
+          throw new Error(msg);
+        }
+        return data;
+      }
+
+      async function loadSession(token) {
+        if (!token) return;
+        try {
+          const data = await api("/me", { headers: { Authorization: "Bearer " + token } });
+          if (data && data.user && data.user.email) {
+            localStorage.setItem(TOKEN_KEY, token);
+            toggleSignedIn(data.user.email);
+          }
+        } catch {
+          localStorage.removeItem(TOKEN_KEY);
+          toggleSignedIn(null);
+        }
+      }
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (working) return;
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+        const confirm = passwordConfirmInput.value.trim();
+        if (!email || !password) {
+          setStatus("Enter an email and password.", "error");
+          return;
+        }
+        if (mode === "signup" && !passwordValid(password)) {
+          setStatus("Password must be 8+ chars and include a letter and number.", "error");
+          return;
+        }
+        if (mode === "signup" && password !== confirm) {
+          setStatus("Passwords do not match.", "error");
+          return;
+        }
+        working = true;
+        submitBtn.disabled = true;
+        submitBtn.textContent = mode === "signup" ? "Creating..." : "Signing in...";
+        setStatus("", "");
+        setCtaStatus("", "");
+        try {
+          const data = await api(mode === "signup" ? "/auth/register" : "/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+          });
+          const token = data && data.token;
+          const emailFromApi = data && data.user && data.user.email ? data.user.email : email;
+          if (token) {
+            localStorage.setItem(TOKEN_KEY, token);
+          }
+          setStatus("Success! You are signed in.", "success");
+          toggleSignedIn(emailFromApi);
+          if (data && data.subscription) {
+            updateSubscriptionUI(data.subscription);
+          }
+          closeModal();
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : "Unable to sign in right now.";
+          setStatus(msg, "error");
+        } finally {
+          working = false;
+          submitBtn.disabled = false;
+          submitBtn.textContent = mode === "signup" ? "Create account" : "Log in";
+        }
+      });
+
+      switchLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        const target = switchLink.dataset.target === "login" ? "login" : "signup";
+        setMode(target);
+      });
+
+      if (signupBtn) {
+        signupBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          openModal("signup");
+        });
+      }
+
+      if (planBtn) {
+        planBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          openPlanModal();
+        });
+      }
+
+      [planMonthly, planYearly].forEach((btn) => {
+        if (!btn) return;
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          selectedPlan = btn.dataset.plan || "";
+          [planMonthly, planYearly].forEach((b) => b && b.classList.remove("selected"));
+          btn.classList.add("selected");
+          if (planSelected) {
+            planSelected.textContent =
+              selectedPlan === "yearly" ? "Selected: $120 / year" : "Selected: $15 / month";
+          }
+          if (payBtn) payBtn.classList.remove("hidden");
+        });
+      });
+
+      if (payBtn) {
+        payBtn.addEventListener("click", async (e) => {
+          e.preventDefault();
+          if (!selectedPlan) {
+            setCtaStatus("Pick a plan first.", "error");
+            return;
+          }
+          const token = localStorage.getItem(TOKEN_KEY);
+          if (!token) {
+            setCtaStatus("Please sign in first.", "error");
+            openModal("login");
+            return;
+          }
+          payBtn.disabled = true;
+          payBtn.textContent = "Updating...";
+          setCtaStatus("", "");
+          try {
+            const resp = await fetch(apiBase + "/plan", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+              },
+              body: JSON.stringify({ plan: selectedPlan })
+            });
+            if (!resp.ok) {
+              const text = await resp.text();
+              throw new Error(text || "Plan update failed");
+            }
+            const data = await resp.json();
+            const exp = data.expires_at ? new Date(data.expires_at).toLocaleDateString() : "";
+            setCtaStatus(`Plan updated to ${data.plan}. ${exp ? "Expires " + exp + "." : ""}`, "success");
+            closePlanModal();
+          } catch (err) {
+            const msg = err instanceof Error ? err.message : "Unable to set plan.";
+            setCtaStatus(msg, "error");
+          } finally {
+            payBtn.disabled = false;
+            payBtn.textContent = "Pay";
+          }
+        });
+      }
+
+      if (loginBtn) {
+        loginBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          openModal("login");
+        });
+      }
+
+      if (closeBtn) {
+        closeBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          closeModal();
+        });
+      }
+      if (planClose) {
+        planClose.addEventListener("click", (e) => {
+          e.preventDefault();
+          closePlanModal();
+        });
+      }
+
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+      planModal.addEventListener("click", (e) => {
+        if (e.target === planModal) {
+          closePlanModal();
+        }
+      });
+
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeModal();
+          closePlanModal();
+        }
+      });
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          localStorage.removeItem(TOKEN_KEY);
+          toggleSignedIn(null);
+        });
+      }
+
+
+      loadSession(localStorage.getItem(TOKEN_KEY));
+      // If already logged in, refresh subscription UI via /me
+      if (localStorage.getItem(TOKEN_KEY)) {
+        api("/me", { headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN_KEY) } })
+          .then((data) => {
+            if (data && data.subscription) {
+              updateSubscriptionUI(data.subscription);
+            }
+          })
+          .catch(() => {});
+      }
+    })();
+  </script>
+</body>
+</html>
