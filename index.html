@@ -11,6 +11,7 @@
     <div class="container hero-content">
       <div>
         <p class="eyebrow">PLO4 / PLO5</p>
+        <img class="brand-mark" src="logo.png" alt="PLO RangeLab logo">
         <h1>PLO RangeLab</h1>
         <p class="lede">Equity, multi-street filters, and easy range study.</p>
         <div class="cta-row">
@@ -168,6 +169,7 @@
       const emailInput = document.getElementById("auth-email");
       const passwordInput = document.getElementById("auth-password");
       const passwordConfirmInput = document.getElementById("auth-password-confirm");
+      const passwordConfirmField = passwordConfirmInput ? passwordConfirmInput.closest(".field") : null;
       const submitBtn = document.getElementById("auth-submit");
       const titleEl = document.getElementById("auth-title");
       const switchLink = document.getElementById("switch-to-login");
@@ -215,6 +217,13 @@
         submitBtn.textContent = isSignup ? "Create account" : "Log in";
         switchLink.textContent = isSignup ? "Log in instead" : "Create an account instead";
         switchLink.dataset.target = isSignup ? "login" : "signup";
+        if (passwordConfirmField) {
+          passwordConfirmField.classList.toggle("hidden", !isSignup);
+        }
+        if (passwordConfirmInput) {
+          passwordConfirmInput.required = isSignup;
+          if (!isSignup) passwordConfirmInput.value = "";
+        }
       }
 
       function openModal(nextMode) {
