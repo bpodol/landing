@@ -59,7 +59,7 @@
         <p class="eyebrow">SIMPLE, TRANSPARENT PRICING</p>
         <h2>Pro</h2>
         <p class="price">185$ / Year</p>
-        <p class="lede">*15$ / month</p>
+        <p class="lede">~15$ / month</p>
         <a class="btn primary" href="#" id="choose-plan">Unlock Pro access</a>
         <p class="micro" style="margin-top:6px;">Cancel anytime • Instant access after payment</p>
       </div>
@@ -77,7 +77,7 @@
         <h2 id="sub-plan">Pro</h2>
         <p class="price" id="sub-status">Subscription active</p>
         <p class="lede" id="sub-expiry">Renews soon</p>
-        <a class="btn primary hidden" href="#" id="upgrade-plan">Switch to yearly and save</a>
+        <a class="btn primary hidden" href="#" id="upgrade-plan">Switch to annual and save</a>
       </div>
       <ul>
         <li>- PLO4 and PLO5 support</li>
@@ -160,9 +160,14 @@
       </div>
       <div class="modal-body">
         <div class="plan-options">
-          <button class="btn full selected" data-plan="yearly" id="plan-yearly">185$ / Year</button>
+          <button class="btn full selected" data-plan="annual" id="plan-annual">185$ / Year</button>
         </div>
-        <p class="micro" id="plan-selected">Selected: 185$ / Year</p>
+        <p class="micro" id="plan-selected">Selected: 185$ / Year (~15$ / month)</p>
+        <p class="status" id="payment-status"></p>
+        <div class="hidden" id="payment-details">
+          <p class="micro">Send <span id="pay-amount"></span> USDT (TRC20) to:</p>
+          <code id="pay-address"></code>
+        </div>
         <button class="btn primary full" id="pay-btn" type="button">Complete payment</button>
       </div>
     </div>
@@ -193,14 +198,20 @@
       const ctaStatus = document.getElementById("cta-status");
       const planModal = document.getElementById("plan-modal");
       const planClose = document.getElementById("plan-close");
-      const planYearly = document.getElementById("plan-yearly");
-      const planButtons = [planYearly].filter(Boolean);
+      const planAnnual = document.getElementById("plan-annual");
+      const planButtons = [planAnnual].filter(Boolean);
       const planSelected = document.getElementById("plan-selected");
       const payBtn = document.getElementById("pay-btn");
+      const paymentStatus = document.getElementById("payment-status");
+      const paymentDetails = document.getElementById("payment-details");
+      const payAmountEl = document.getElementById("pay-amount");
+      const payAddressEl = document.getElementById("pay-address");
 
       let mode = "signup";
       let working = false;
-      let selectedPlan = "yearly";
+      let selectedPlan = "annual";
+      let paymentPoll = null;
+      let activeOrderId = null;
 
       function passwordValid(pw) {
         return pw && pw.length >= 8 && /[A-Za-z]/.test(pw) && /[0-9]/.test(pw);
@@ -216,6 +227,25 @@
         ctaStatus.textContent = message || "";
         ctaStatus.dataset.kind = kind || "";
         ctaStatus.classList.toggle("show", !!message);
+      }
+
+      function setPaymentStatus(message, kind) {
+        if (!paymentStatus) return;
+        paymentStatus.textContent = message || "";
+        paymentStatus.dataset.kind = kind || "";
+        paymentStatus.classList.toggle("show", !!message);
+      }
+
+      function resetPaymentState() {
+        activeOrderId = null;
+        if (paymentPoll) {
+          clearInterval(paymentPoll);
+          paymentPoll = null;
+        }
+        if (paymentDetails) paymentDetails.classList.add("hidden");
+        if (payAmountEl) payAmountEl.textContent = "";
+        if (payAddressEl) payAddressEl.textContent = "";
+        setPaymentStatus("", "");
       }
 
       function setMode(next) {
@@ -248,15 +278,17 @@
       }
 
       function openPlanModal() {
-        selectedPlan = "yearly";
+        selectedPlan = "annual";
+        resetPaymentState();
         planButtons.forEach((b) => b.classList.toggle("selected", b.dataset.plan === selectedPlan));
-        if (planSelected) planSelected.textContent = "Selected: 185$ / Year";
+        if (planSelected) planSelected.textContent = "Selected: 185$ / Year (~15$ / month)";
         if (payBtn) payBtn.classList.remove("hidden");
         planModal.classList.add("open");
         planModal.setAttribute("aria-hidden", "false");
       }
 
       function closePlanModal() {
+        resetPaymentState();
         planModal.classList.remove("open");
         planModal.setAttribute("aria-hidden", "true");
       }
@@ -289,7 +321,8 @@
         if (subSection) subSection.classList.toggle("hidden", !isActive);
         if (!isActive) return;
 
-        const planLabel = subscription.plan === "yearly" ? "Pro Yearly" : "Pro Monthly";
+        const isAnnual = subscription.plan === "yearly" || subscription.plan === "annual";
+        const planLabel = isAnnual ? "Pro Annual" : "Pro Monthly";
         if (subPlan) subPlan.textContent = planLabel;
         if (subStatus) subStatus.textContent = "Subscription active";
         if (subExpiry && subscription.expires_at) {
@@ -302,11 +335,11 @@
           upgradeBtn.classList.toggle("hidden", !showUpgrade);
           upgradeBtn.onclick = (e) => {
             e.preventDefault();
-            // preset selection to yearly and open plan modal
-            selectedPlan = "yearly";
+            // preset selection to annual and open plan modal
+            selectedPlan = "annual";
             planButtons.forEach((b) => b && b.classList.remove("selected"));
-            if (planYearly) planYearly.classList.add("selected");
-            if (planSelected) planSelected.textContent = "Selected: 185$ / Year";
+            if (planAnnual) planAnnual.classList.add("selected");
+            if (planSelected) planSelected.textContent = "Selected: 185$ / Year (~15$ / month)";
             if (payBtn) payBtn.classList.remove("hidden");
             openPlanModal();
           };
@@ -327,6 +360,52 @@
           throw new Error(msg);
         }
         return data;
+      }
+
+      async function pollOrderStatus(orderId, token) {
+        const data = await api(`/api/billing/order-status?orderId=${encodeURIComponent(orderId)}`, {
+          headers: { Authorization: "Bearer " + token }
+        });
+        return data?.status;
+      }
+
+      async function refreshSubscription(token) {
+        try {
+          const me = await api("/me", { headers: { Authorization: "Bearer " + token } });
+          if (me && me.subscription) {
+            updateSubscriptionUI(me.subscription);
+          }
+        } catch {
+          // ignore
+        }
+      }
+
+      function startPaymentPolling(orderId, token) {
+        if (paymentPoll) {
+          clearInterval(paymentPoll);
+          paymentPoll = null;
+        }
+        activeOrderId = orderId;
+        paymentPoll = setInterval(async () => {
+          try {
+            const status = await pollOrderStatus(orderId, token);
+            if (!status) return;
+            if (status === "paid") {
+              setPaymentStatus("Paid ✅ Subscription will update shortly.", "success");
+              clearInterval(paymentPoll);
+              paymentPoll = null;
+              await refreshSubscription(token);
+            } else if (status === "failed" || status === "expired") {
+              setPaymentStatus("Payment failed or expired. Please try again.", "error");
+              clearInterval(paymentPoll);
+              paymentPoll = null;
+            } else {
+              setPaymentStatus("Waiting for payment confirmation…", "info");
+            }
+          } catch {
+            // ignore transient polling errors
+          }
+        }, 4000);
       }
 
       async function loadSession(token) {
@@ -428,7 +507,7 @@
           planButtons.forEach((b) => b && b.classList.remove("selected"));
           btn.classList.add("selected");
           if (planSelected) {
-            planSelected.textContent = "Selected: 185$ / Year";
+            planSelected.textContent = "Selected: 185$ / Year (~15$ / month)";
           }
           if (payBtn) payBtn.classList.remove("hidden");
         });
@@ -448,28 +527,45 @@
             return;
           }
           payBtn.disabled = true;
-          payBtn.textContent = "Processing...";
+          payBtn.textContent = "Creating payment...";
           setCtaStatus("", "");
+          setPaymentStatus("", "");
           try {
-            const resp = await fetch(apiBase + "/plan", {
+            const normalizedPlan = selectedPlan || "annual";
+            const data = await api("/api/billing/create-nowpayments-payment", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + token
               },
-              body: JSON.stringify({ plan: selectedPlan })
+              body: JSON.stringify({ plan: normalizedPlan })
             });
-            if (!resp.ok) {
-              const text = await resp.text();
-              throw new Error(text || "Plan update failed");
+
+            if (data.orderId) {
+              startPaymentPolling(data.orderId, token);
             }
-            const data = await resp.json();
-            const exp = data.expires_at ? new Date(data.expires_at).toLocaleDateString() : "";
-            setCtaStatus(`Plan updated to ${data.plan}. ${exp ? "Expires " + exp + "." : ""}`, "success");
-            closePlanModal();
+
+            if (data.paymentUrl) {
+              setPaymentStatus("Opening payment page in a new tab. Complete the payment to unlock access.", "info");
+              window.open(data.paymentUrl, "_blank");
+            } else if (data.payAddress) {
+              const currencyLabel = (data.payCurrency || "USDT").toUpperCase();
+              if (payAmountEl) {
+                const amountText = data.payAmount ? `${data.payAmount} ${currencyLabel}` : currencyLabel;
+                payAmountEl.textContent = amountText;
+              }
+              if (payAddressEl) payAddressEl.textContent = data.payAddress;
+              if (paymentDetails) paymentDetails.classList.remove("hidden");
+              setPaymentStatus(
+                "Send the exact amount to the address above. We will confirm automatically once paid.",
+                "info"
+              );
+            } else {
+              setPaymentStatus("Payment created. Follow the instructions in the payment tab.", "info");
+            }
           } catch (err) {
             const msg = err instanceof Error ? err.message : "Unable to set plan.";
-            setCtaStatus(msg, "error");
+            setPaymentStatus(msg, "error");
           } finally {
             payBtn.disabled = false;
             payBtn.textContent = "Complete payment";
