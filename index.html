@@ -58,8 +58,8 @@
       <div>
         <p class="eyebrow">SIMPLE, TRANSPARENT PRICING</p>
         <h2>Pro</h2>
-        <p class="price">$15 / month</p>
-        <p class="lede">or $120 / year (2 months free)</p>
+        <p class="price">185$ / Year</p>
+        <p class="lede">*15$ / month</p>
         <a class="btn primary" href="#" id="choose-plan">Unlock Pro access</a>
         <p class="micro" style="margin-top:6px;">Cancel anytime • Instant access after payment</p>
       </div>
@@ -160,11 +160,10 @@
       </div>
       <div class="modal-body">
         <div class="plan-options">
-          <button class="btn full" data-plan="monthly" id="plan-monthly">$15 / month</button>
-          <button class="btn full" data-plan="yearly" id="plan-yearly">$120 / year</button>
+          <button class="btn full selected" data-plan="yearly" id="plan-yearly">185$ / Year</button>
         </div>
-        <p class="micro" id="plan-selected"></p>
-        <button class="btn primary full hidden" id="pay-btn" type="button">Complete payment</button>
+        <p class="micro" id="plan-selected">Selected: 185$ / Year</p>
+        <button class="btn primary full" id="pay-btn" type="button">Complete payment</button>
       </div>
     </div>
   </div>
@@ -194,14 +193,14 @@
       const ctaStatus = document.getElementById("cta-status");
       const planModal = document.getElementById("plan-modal");
       const planClose = document.getElementById("plan-close");
-      const planMonthly = document.getElementById("plan-monthly");
       const planYearly = document.getElementById("plan-yearly");
+      const planButtons = [planYearly].filter(Boolean);
       const planSelected = document.getElementById("plan-selected");
       const payBtn = document.getElementById("pay-btn");
 
       let mode = "signup";
       let working = false;
-      let selectedPlan = "";
+      let selectedPlan = "yearly";
 
       function passwordValid(pw) {
         return pw && pw.length >= 8 && /[A-Za-z]/.test(pw) && /[0-9]/.test(pw);
@@ -249,9 +248,10 @@
       }
 
       function openPlanModal() {
-        selectedPlan = "";
-        if (planSelected) planSelected.textContent = "";
-        if (payBtn) payBtn.classList.add("hidden");
+        selectedPlan = "yearly";
+        planButtons.forEach((b) => b.classList.toggle("selected", b.dataset.plan === selectedPlan));
+        if (planSelected) planSelected.textContent = "Selected: 185$ / Year";
+        if (payBtn) payBtn.classList.remove("hidden");
         planModal.classList.add("open");
         planModal.setAttribute("aria-hidden", "false");
       }
@@ -304,9 +304,9 @@
             e.preventDefault();
             // preset selection to yearly and open plan modal
             selectedPlan = "yearly";
-            [planMonthly, planYearly].forEach((b) => b && b.classList.remove("selected"));
+            planButtons.forEach((b) => b && b.classList.remove("selected"));
             if (planYearly) planYearly.classList.add("selected");
-            if (planSelected) planSelected.textContent = "Selected: $120 / year";
+            if (planSelected) planSelected.textContent = "Selected: 185$ / Year";
             if (payBtn) payBtn.classList.remove("hidden");
             openPlanModal();
           };
@@ -421,16 +421,14 @@
         });
       }
 
-      [planMonthly, planYearly].forEach((btn) => {
-        if (!btn) return;
+      planButtons.forEach((btn) => {
         btn.addEventListener("click", (e) => {
           e.preventDefault();
           selectedPlan = btn.dataset.plan || "";
-          [planMonthly, planYearly].forEach((b) => b && b.classList.remove("selected"));
+          planButtons.forEach((b) => b && b.classList.remove("selected"));
           btn.classList.add("selected");
           if (planSelected) {
-            planSelected.textContent =
-              selectedPlan === "yearly" ? "Selected: $120 / year" : "Selected: $15 / month";
+            planSelected.textContent = "Selected: 185$ / Year";
           }
           if (payBtn) payBtn.classList.remove("hidden");
         });
