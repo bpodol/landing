@@ -160,15 +160,17 @@
       </div>
       <div class="modal-body">
         <div class="plan-options">
-          <button class="btn full selected" data-plan="annual" id="plan-annual">185$ / Year</button>
+          <div class="plan-pill selected" data-plan="annual" id="plan-annual">
+            Annual plan • 185$ / Year (~15$ / month)
+          </div>
         </div>
-        <p class="micro" id="plan-selected">Selected: 185$ / Year (~15$ / month)</p>
+        <p class="micro" id="plan-selected">You will be charged 185$ yearly (~15$ / month).</p>
         <p class="status" id="payment-status"></p>
         <div class="hidden" id="payment-details">
           <p class="micro">Send <span id="pay-amount"></span> USDT (TRC20) to:</p>
           <code id="pay-address"></code>
         </div>
-        <button class="btn primary full" id="pay-btn" type="button">Complete payment</button>
+        <button class="btn primary full" id="pay-btn" type="button">Proceed to payment</button>
       </div>
     </div>
   </div>
@@ -281,7 +283,7 @@
         selectedPlan = "annual";
         resetPaymentState();
         planButtons.forEach((b) => b.classList.toggle("selected", b.dataset.plan === selectedPlan));
-        if (planSelected) planSelected.textContent = "Selected: 185$ / Year (~15$ / month)";
+        if (planSelected) planSelected.textContent = "You will be charged 185$ yearly (~15$ / month).";
         if (payBtn) payBtn.classList.remove("hidden");
         planModal.classList.add("open");
         planModal.setAttribute("aria-hidden", "false");
@@ -339,7 +341,7 @@
             selectedPlan = "annual";
             planButtons.forEach((b) => b && b.classList.remove("selected"));
             if (planAnnual) planAnnual.classList.add("selected");
-            if (planSelected) planSelected.textContent = "Selected: 185$ / Year (~15$ / month)";
+            if (planSelected) planSelected.textContent = "You will be charged 185$ yearly (~15$ / month).";
             if (payBtn) payBtn.classList.remove("hidden");
             openPlanModal();
           };
@@ -500,19 +502,6 @@
         });
       }
 
-      planButtons.forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          e.preventDefault();
-          selectedPlan = btn.dataset.plan || "";
-          planButtons.forEach((b) => b && b.classList.remove("selected"));
-          btn.classList.add("selected");
-          if (planSelected) {
-            planSelected.textContent = "Selected: 185$ / Year (~15$ / month)";
-          }
-          if (payBtn) payBtn.classList.remove("hidden");
-        });
-      });
-
       if (payBtn) {
         payBtn.addEventListener("click", async (e) => {
           e.preventDefault();
@@ -527,7 +516,7 @@
             return;
           }
           payBtn.disabled = true;
-          payBtn.textContent = "Creating payment...";
+          payBtn.textContent = "Preparing checkout...";
           setCtaStatus("", "");
           setPaymentStatus("", "");
           try {
@@ -568,7 +557,7 @@
             setPaymentStatus(msg, "error");
           } finally {
             payBtn.disabled = false;
-            payBtn.textContent = "Complete payment";
+            payBtn.textContent = "Proceed to payment";
           }
         });
       }
