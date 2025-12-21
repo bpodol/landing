@@ -217,6 +217,18 @@
       let paymentPoll = null;
       let activeOrderId = null;
 
+      function storeTokenFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const urlToken = params.get("token");
+        if (!urlToken) return null;
+        localStorage.setItem(TOKEN_KEY, urlToken);
+        params.delete("token");
+        const newQuery = params.toString();
+        const newUrl = newQuery ? `${window.location.pathname}?${newQuery}` : window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+        return urlToken;
+      }
+
       function passwordValid(pw) {
         return pw && pw.length >= 8 && /[A-Za-z]/.test(pw) && /[0-9]/.test(pw);
       }
@@ -653,10 +665,11 @@
       }
 
 
-      loadSession(localStorage.getItem(TOKEN_KEY));
+      const initialToken = storeTokenFromUrl() || localStorage.getItem(TOKEN_KEY);
+      loadSession(initialToken);
       // If already logged in, refresh subscription UI via /me
-      if (localStorage.getItem(TOKEN_KEY)) {
-        api("/me", { headers: { Authorization: "Bearer " + localStorage.getItem(TOKEN_KEY) } })
+      if (initialToken) {
+        api("/me", { headers: { Authorization: "Bearer " + initialToken } })
           .then((data) => {
             if (data && data.subscription) {
               updateSubscriptionUI(data.subscription);
