@@ -475,6 +475,7 @@
           });
           if (mode === "signup") {
             setStatus((data && data.message) || "Check your email to confirm your account.", "success");
+            toggleResend(true);
             return;
           }
           const token = data && data.token;
