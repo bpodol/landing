@@ -144,6 +144,7 @@
           <input type="password" id="auth-password-confirm" required placeholder="Re-enter your password">
         </label>
         <p class="status" id="auth-status"></p>
+        <button class="btn ghost full hidden" type="button" id="resend-confirmation">Resend confirmation email</button>
         <button class="btn primary full" type="submit" id="auth-submit">Create account</button>
         <p class="micro auth-switch">
           <a href="#" id="switch-to-login">Log in instead</a>
@@ -186,6 +187,7 @@
       const passwordConfirmInput = document.getElementById("auth-password-confirm");
       const passwordConfirmField = passwordConfirmInput ? passwordConfirmInput.closest(".field") : null;
       const submitBtn = document.getElementById("auth-submit");
+      const resendBtn = document.getElementById("resend-confirmation");
       const titleEl = document.getElementById("auth-title");
       const switchLink = document.getElementById("switch-to-login");
       const statusEl = document.getElementById("auth-status");
@@ -223,6 +225,10 @@
         statusEl.textContent = message || "";
         statusEl.dataset.kind = kind || "";
         statusEl.classList.toggle("show", !!message);
+      }
+      function toggleResend(show) {
+        if (!resendBtn) return;
+        resendBtn.classList.toggle("hidden", !show);
       }
 
       function setCtaStatus(message, kind) {
@@ -269,6 +275,7 @@
       function openModal(nextMode) {
         setMode(nextMode);
         setStatus("", "");
+        toggleResend(false);
         modal.classList.add("open");
         modal.setAttribute("aria-hidden", "false");
         setTimeout(() => emailInput.focus(), 50);
@@ -447,12 +454,17 @@
         submitBtn.textContent = mode === "signup" ? "Creating..." : "Signing in...";
         setStatus("", "");
         setCtaStatus("", "");
+        toggleResend(false);
         try {
           const data = await api(mode === "signup" ? "/auth/register" : "/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password })
           });
+          if (mode === "signup") {
+            setStatus((data && data.message) || "Check your email to confirm your account.", "success");
+            return;
+          }
           const token = data && data.token;
           const emailFromApi = data && data.user && data.user.email ? data.user.email : email;
           if (token) {
@@ -475,6 +487,9 @@
         } catch (err) {
           const msg = err instanceof Error ? err.message : "Unable to sign in right now.";
           setStatus(msg, "error");
+          if (mode === "login" && msg.toLowerCase().includes("confirm your email")) {
+            toggleResend(true);
+          }
         } finally {
           working = false;
           submitBtn.disabled = false;
@@ -487,6 +502,35 @@
         const target = switchLink.dataset.target === "login" ? "login" : "signup";
         setMode(target);
       });
+
+      if (resendBtn) {
+        resendBtn.addEventListener("click", async (e) => {
+          e.preventDefault();
+          if (working) return;
+          const email = emailInput.value.trim();
+          if (!email) {
+            setStatus("Enter your email to resend confirmation.", "error");
+            return;
+          }
+          working = true;
+          resendBtn.disabled = true;
+          setStatus("Sending confirmation email...", "info");
+          try {
+            const data = await api("/auth/resend-confirmation", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email })
+            });
+            setStatus((data && data.message) || "Confirmation email sent.", "success");
+          } catch (err) {
+            const msg = err instanceof Error ? err.message : "Unable to resend confirmation right now.";
+            setStatus(msg, "error");
+          } finally {
+            working = false;
+            resendBtn.disabled = false;
+          }
+        });
+      }
 
       if (signupBtn) {
         signupBtn.addEventListener("click", (e) => {
