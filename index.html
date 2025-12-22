@@ -145,6 +145,7 @@
         </label>
         <p class="status" id="auth-status"></p>
         <button class="btn ghost full hidden" type="button" id="resend-confirmation">Resend confirmation email</button>
+        <button class="btn ghost full hidden" type="button" id="forgot-password">Forgot password?</button>
         <button class="btn primary full" type="submit" id="auth-submit">Create account</button>
         <p class="micro auth-switch">
           <a href="#" id="switch-to-login">Log in instead</a>
@@ -186,8 +187,11 @@
       const passwordInput = document.getElementById("auth-password");
       const passwordConfirmInput = document.getElementById("auth-password-confirm");
       const passwordConfirmField = passwordConfirmInput ? passwordConfirmInput.closest(".field") : null;
+      const emailField = emailInput ? emailInput.closest(".field") : null;
+      const passwordField = passwordInput ? passwordInput.closest(".field") : null;
       const submitBtn = document.getElementById("auth-submit");
       const resendBtn = document.getElementById("resend-confirmation");
+      const forgotBtn = document.getElementById("forgot-password");
       const titleEl = document.getElementById("auth-title");
       const switchLink = document.getElementById("switch-to-login");
       const statusEl = document.getElementById("auth-status");
@@ -216,6 +220,18 @@
       let selectedPlan = "annual";
       let paymentPoll = null;
       let activeOrderId = null;
+      let resetTokenValue = null;
+
+      function takeResetTokenFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const urlToken = params.get("resetToken");
+        if (!urlToken) return null;
+        params.delete("resetToken");
+        const newQuery = params.toString();
+        const newUrl = newQuery ? `${window.location.pathname}?${newQuery}` : window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+        return urlToken;
+      }
 
       function storeTokenFromUrl() {
         const params = new URLSearchParams(window.location.search);
@@ -241,6 +257,10 @@
       function toggleResend(show) {
         if (!resendBtn) return;
         resendBtn.classList.toggle("hidden", !show);
+      }
+      function toggleForgot(show) {
+        if (!forgotBtn) return;
+        forgotBtn.classList.toggle("hidden", !show);
       }
 
       function setCtaStatus(message, kind) {
@@ -269,19 +289,57 @@
       }
 
       function setMode(next) {
-        mode = next === "login" ? "login" : "signup";
+        mode = ["login", "forgot", "reset"].includes(next) ? next : "signup";
         const isSignup = mode === "signup";
-        titleEl.textContent = isSignup ? "Create your account" : "Log in to your account";
-        submitBtn.textContent = isSignup ? "Create account" : "Log in";
-        switchLink.textContent = isSignup ? "Log in instead" : "Create an account instead";
-        switchLink.dataset.target = isSignup ? "login" : "signup";
+        const isLogin = mode === "login";
+        const isForgot = mode === "forgot";
+        const isReset = mode === "reset";
+
+        titleEl.textContent = isSignup
+          ? "Create your account"
+          : isLogin
+            ? "Log in to your account"
+            : isForgot
+              ? "Reset your password"
+              : "Set a new password";
+        submitBtn.textContent = isSignup
+          ? "Create account"
+          : isLogin
+            ? "Log in"
+            : isForgot
+              ? "Send reset link"
+              : "Save new password";
+        if (isLogin) {
+          switchLink.textContent = "Create an account instead";
+          switchLink.dataset.target = "signup";
+        } else if (isSignup) {
+          switchLink.textContent = "Log in instead";
+          switchLink.dataset.target = "login";
+        } else {
+          switchLink.textContent = "Back to login";
+          switchLink.dataset.target = "login";
+        }
+
+        if (emailField) emailField.classList.toggle("hidden", isReset);
+        if (emailInput) {
+          emailInput.required = !isReset;
+          if (isReset) emailInput.value = "";
+        }
+        if (passwordField) passwordField.classList.toggle("hidden", isForgot);
+        if (passwordInput) {
+          passwordInput.required = !isForgot;
+          if (isForgot) passwordInput.value = "";
+        }
         if (passwordConfirmField) {
-          passwordConfirmField.classList.toggle("hidden", !isSignup);
+          const showConfirm = isSignup || isReset;
+          passwordConfirmField.classList.toggle("hidden", !showConfirm);
+          if (passwordConfirmInput) {
+            passwordConfirmInput.required = showConfirm;
+            if (!showConfirm) passwordConfirmInput.value = "";
+          }
         }
-        if (passwordConfirmInput) {
-          passwordConfirmInput.required = isSignup;
-          if (!isSignup) passwordConfirmInput.value = "";
-        }
+        toggleResend(false);
+        toggleForgot(false);
       }
 
       function openModal(nextMode) {
@@ -449,35 +507,94 @@
         const email = emailInput.value.trim();
         const password = passwordInput.value.trim();
         const confirm = passwordConfirmInput.value.trim();
-        if (!email || !password) {
-          setStatus("Enter an email and password.", "error");
+        if (mode !== "reset" && !email) {
+          setStatus("Enter your email.", "error");
           return;
         }
-        if (mode === "signup" && !passwordValid(password)) {
+        if ((mode === "signup" || mode === "login") && !password) {
+          setStatus("Enter your password.", "error");
+          return;
+        }
+        if ((mode === "signup" || mode === "reset") && !passwordValid(password)) {
           setStatus("Password must be 8+ chars and include a letter and number.", "error");
           return;
         }
-        if (mode === "signup" && password !== confirm) {
+        if ((mode === "signup" || mode === "reset") && password !== confirm) {
           setStatus("Passwords do not match.", "error");
+          return;
+        }
+        if (mode === "reset" && !resetTokenValue) {
+          setStatus("Reset link is invalid or expired. Request a new one.", "error");
           return;
         }
         working = true;
         submitBtn.disabled = true;
-        submitBtn.textContent = mode === "signup" ? "Creating..." : "Signing in...";
+        submitBtn.textContent =
+          mode === "signup"
+            ? "Creating..."
+            : mode === "login"
+              ? "Signing in..."
+              : mode === "forgot"
+                ? "Sending..."
+                : "Saving...";
         setStatus("", "");
         setCtaStatus("", "");
         toggleResend(false);
+        toggleForgot(false);
         try {
-          const data = await api(mode === "signup" ? "/auth/register" : "/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
-          });
           if (mode === "signup") {
+            const data = await api("/auth/register", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password })
+            });
             setStatus((data && data.message) || "Check your email to confirm your account.", "success");
             toggleResend(true);
             return;
           }
+
+          if (mode === "forgot") {
+            const data = await api("/auth/forgot-password", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email })
+            });
+            setStatus((data && data.message) || "If an account exists, you will receive a reset email shortly.", "success");
+            return;
+          }
+
+          if (mode === "reset") {
+            const data = await api("/auth/reset-password", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ token: resetTokenValue, password })
+            });
+            const token = data && data.token;
+            const emailFromApi = data && data.user && data.user.email ? data.user.email : "";
+            if (token) {
+              localStorage.setItem(TOKEN_KEY, token);
+              toggleSignedIn(emailFromApi);
+              try {
+                const me = await api("/me", { headers: { Authorization: "Bearer " + token } });
+                if (me && me.subscription) {
+                  updateSubscriptionUI(me.subscription);
+                }
+              } catch {
+                // ignore
+              }
+            }
+            setStatus("Password updated. You are now signed in.", "success");
+            resetTokenValue = null;
+            closeModal();
+            return;
+          }
+
+          // login
+          const data = await api("/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+          });
           const token = data && data.token;
           const emailFromApi = data && data.user && data.user.email ? data.user.email : email;
           if (token) {
@@ -500,13 +617,25 @@
         } catch (err) {
           const msg = err instanceof Error ? err.message : "Unable to sign in right now.";
           setStatus(msg, "error");
-          if (mode === "login" && msg.toLowerCase().includes("confirm your email")) {
-            toggleResend(true);
+          if (mode === "login") {
+            if (msg.toLowerCase().includes("confirm your email")) {
+              toggleResend(true);
+            }
+            if (msg.toLowerCase().includes("invalid credentials")) {
+              toggleForgot(true);
+            }
           }
         } finally {
           working = false;
           submitBtn.disabled = false;
-          submitBtn.textContent = mode === "signup" ? "Create account" : "Log in";
+          submitBtn.textContent =
+            mode === "signup"
+              ? "Create account"
+              : mode === "login"
+                ? "Log in"
+                : mode === "forgot"
+                  ? "Send reset link"
+                  : "Save new password";
         }
       });
 
@@ -542,6 +671,15 @@
             working = false;
             resendBtn.disabled = false;
           }
+        });
+      }
+
+      if (forgotBtn) {
+        forgotBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          setMode("forgot");
+          toggleForgot(false);
+          setStatus("", "");
         });
       }
 
@@ -665,6 +803,13 @@
         });
       }
 
+
+      const resetTokenFromUrl = takeResetTokenFromUrl();
+      if (resetTokenFromUrl) {
+        resetTokenValue = resetTokenFromUrl;
+        openModal("reset");
+        setStatus("Set a new password to continue.", "info");
+      }
 
       const initialToken = storeTokenFromUrl() || localStorage.getItem(TOKEN_KEY);
       loadSession(initialToken);
