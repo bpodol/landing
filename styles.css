@@ -381,6 +381,10 @@ main.container {
   z-index: 10;
 }
 
+.modal-backdrop#auth-modal {
+  z-index: 20;
+}
+
 .modal-backdrop.open {
   display: flex;
 }

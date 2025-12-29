@@ -641,7 +641,12 @@
           e.preventDefault();
           if (!selectedPlan) { setCtaStatus("Pick a plan first.", "error"); return; }
           const token = localStorage.getItem(TOKEN_KEY);
-          if (!token) { setCtaStatus("Please sign in first.", "error"); openModal("login"); return; }
+          if (!token) {
+            setCtaStatus("Please sign in first.", "error");
+            closePlanModal();
+            openModal("login");
+            return;
+          }
 
           payBtn.disabled = true;
           payBtn.textContent = "Preparing checkout...";
