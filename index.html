@@ -165,10 +165,10 @@
       <div class="modal-body">
         <div class="plan-options">
           <div class="plan-pill selected" data-plan="annual" id="plan-annual">
-            Annual plan • 185$ / Year (~15$ / month)
+            Annual plan • 180$ / Year (15$ / month)
           </div>
         </div>
-        <p class="micro" id="plan-selected">One-time payment of 185$ in USDT (TRC20) for 1 year of access (~15$ / month).</p>
+        <p class="micro" id="plan-selected">One-time payment of 180$ in USDT (TRC20) for 1 year of access (15$ / month).</p>
         <p class="status" id="payment-status"></p>
         <div class="hidden" id="payment-details">
           <p class="micro">Send <span id="pay-amount"></span> USDT (TRC20) to:</p>
@@ -363,7 +363,7 @@
         selectedPlan = "annual";
         resetPaymentState();
         planButtons.forEach((b) => b.classList.toggle("selected", b.dataset.plan === selectedPlan));
-        if (planSelected) planSelected.textContent = "One-time payment of 185$ in USDT (TRC20) for 1 year of access (~15$ / month).";
+        if (planSelected) planSelected.textContent = "One-time payment of 180$ in USDT (TRC20) for 1 year of access (15$ / month).";
         if (payBtn) payBtn.classList.remove("hidden");
         planModal.classList.add("open");
         planModal.setAttribute("aria-hidden", "false");
@@ -420,7 +420,7 @@
             selectedPlan = "annual";
             planButtons.forEach((b) => b && b.classList.remove("selected"));
             if (planAnnual) planAnnual.classList.add("selected");
-            if (planSelected) planSelected.textContent = "One-time payment of 185$ in USDT (TRC20) for 1 year of access (~15$ / month).";
+            if (planSelected) planSelected.textContent = "One-time payment of 180$ in USDT (TRC20) for 1 year of access (15$ / month).";
             if (payBtn) payBtn.classList.remove("hidden");
             openPlanModal();
           };
