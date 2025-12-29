@@ -9,12 +9,12 @@
 <body data-api-base="https://auth-api-0krz.onrender.com">
   <header class="hero">
     <div class="container hero-content">
-      <div>
+      <div class="hero-inner">
         <p class="eyebrow">PLO4 &amp; PLO5 RANGE ANALYSIS</p>
         <img class="brand-mark" src="logo.png" alt="PLO RangeLab logo">
         <div class="product-name">PLO RangeLab</div>
-        <h1>Advanced PLO Range Analysis — Built for Serious Study</h1>
-        <p class="lede">Explore PLO4 and PLO5 ranges with fast equity calculations, board-aware filters, and multi-street range breakdowns — without solver complexity.</p>
+        <h1>PLO Range &amp; Equity Analysis</h1>
+        <p class="lede">Analyze PLO4 and PLO5 ranges street by street. Compute equity, see how ranges hit the board, filter them, and carry them forward.</p>
         <div class="cta-row">
           <a class="btn primary" href="#" id="signup">Create account</a>
           <a class="btn ghost" href="https://github.com/bpodol/landing/releases/download/v0.1.0/PLO.RangeLab_0.1.0_x64-setup.exe" id="download">Download desktop app</a>
@@ -26,14 +26,16 @@
           <button class="btn ghost" id="logout-btn">Log out</button>
         </div>
         <p class="status micro" id="cta-status"></p>
-      </div>
-      <div class="card highlight">
-        <h3>Designed specifically for Pot-Limit Omaha</h3>
-        <ul>
-          <li>Accurate PLO4 &amp; PLO5 equity calculations</li>
-          <li>Street-by-street range filtering (flop → turn → river)</li>
-          <li>Fast range iteration without solver overhead</li>
-        </ul>
+
+        <div class="card highlight hero-demo">
+          <h3>What you can do</h3>
+          <ul>
+            <li>Input ranges manually, choose from presets, or % notation</li>
+            <li>Compute equity between multiple players</li>
+            <li>Filter ranges and advance them across streets</li>
+          </ul>
+          <img src="Screenshot.png" alt="PLO RangeLab range filtering interface screenshot" width="700">
+        </div>
       </div>
     </div>
   </header>
@@ -41,16 +43,16 @@
   <main class="container">
     <section class="grid features">
       <div class="card">
-        <h3>Fast, accurate equity</h3>
-        <p>Run PLO4 and PLO5 equity simulations instantly to understand how ranges perform across different boards and runouts.</p>
+        <h3>Flexible range input</h3>
+        <p>Paste ranges manually, choose presets, or enter percentage ranges like 60%–5%. Save your own custom ranges for later use.</p>
       </div>
       <div class="card">
-        <h3>Board-aware range filters</h3>
-        <p>Filter ranges by made hands, draws, and board texture across streets — see how ranges actually evolve in real hands.</p>
+        <h3>Equity &amp; board interaction</h3>
+        <p>See how ranges hit the board. Track equity changes from flop to river.</p>
       </div>
       <div class="card">
-        <h3>Built for study, not guessing</h3>
-        <p>Save presets, compare ranges, and break down spots clearly — perfect for off-table study and session review.</p>
+        <h3>Filter, save, export</h3>
+        <p>Filter and weight ranges, take them to the next street, and export them by copying at any point.</p>
       </div>
     </section>
 
@@ -58,10 +60,10 @@
       <div>
         <p class="eyebrow">SIMPLE, TRANSPARENT PRICING</p>
         <h2>Pro</h2>
-        <p class="price">185$ / Year</p>
-        <p class="lede">~15$ / month</p>
+        <p class="price">15$ / month</p>
+        <p class="lede">pay anually</p>
         <a class="btn primary" href="#" id="choose-plan">Unlock Pro access</a>
-        <p class="micro" style="margin-top:6px;">Cancel anytime • Instant access after payment</p>
+        <p class="micro" style="margin-top:6px;">Instant access after payment</p>
       </div>
       <ul>
         <li>- Full PLO4 &amp; PLO5 support</li>
@@ -177,6 +179,7 @@
     </div>
   </div>
 
+  <!-- Keep your existing script exactly as-is -->
   <script>
     (function () {
       const apiBase = window.AUTH_API_BASE || document.body.dataset.apiBase || "http://localhost:3000";
@@ -414,7 +417,6 @@
           upgradeBtn.classList.toggle("hidden", !showUpgrade);
           upgradeBtn.onclick = (e) => {
             e.preventDefault();
-            // preset selection to annual and open plan modal
             selectedPlan = "annual";
             planButtons.forEach((b) => b && b.classList.remove("selected"));
             if (planAnnual) planAnnual.classList.add("selected");
@@ -429,11 +431,7 @@
         const res = await fetch(apiBase + path, options);
         const text = await res.text();
         let data = null;
-        try {
-          data = text ? JSON.parse(text) : null;
-        } catch {
-          data = null;
-        }
+        try { data = text ? JSON.parse(text) : null; } catch { data = null; }
         if (!res.ok) {
           const msg = (data && (data.error || data.message)) || "Request failed";
           throw new Error(msg);
@@ -451,19 +449,12 @@
       async function refreshSubscription(token) {
         try {
           const me = await api("/me", { headers: { Authorization: "Bearer " + token } });
-          if (me && me.subscription) {
-            updateSubscriptionUI(me.subscription);
-          }
-        } catch {
-          // ignore
-        }
+          if (me && me.subscription) updateSubscriptionUI(me.subscription);
+        } catch {}
       }
 
       function startPaymentPolling(orderId, token) {
-        if (paymentPoll) {
-          clearInterval(paymentPoll);
-          paymentPoll = null;
-        }
+        if (paymentPoll) clearInterval(paymentPoll);
         activeOrderId = orderId;
         paymentPoll = setInterval(async () => {
           try {
@@ -481,9 +472,7 @@
             } else {
               setPaymentStatus("Waiting for payment confirmation…", "info");
             }
-          } catch {
-            // ignore transient polling errors
-          }
+          } catch {}
         }, 4000);
       }
 
@@ -507,40 +496,23 @@
         const email = emailInput.value.trim();
         const password = passwordInput.value.trim();
         const confirm = passwordConfirmInput.value.trim();
-        if (mode !== "reset" && !email) {
-          setStatus("Enter your email.", "error");
-          return;
-        }
-        if ((mode === "signup" || mode === "login") && !password) {
-          setStatus("Enter your password.", "error");
-          return;
-        }
-        if ((mode === "signup" || mode === "reset") && !passwordValid(password)) {
-          setStatus("Password must be 8+ chars and include a letter and number.", "error");
-          return;
-        }
-        if ((mode === "signup" || mode === "reset") && password !== confirm) {
-          setStatus("Passwords do not match.", "error");
-          return;
-        }
-        if (mode === "reset" && !resetTokenValue) {
-          setStatus("Reset link is invalid or expired. Request a new one.", "error");
-          return;
-        }
+        if (mode !== "reset" && !email) { setStatus("Enter your email.", "error"); return; }
+        if ((mode === "signup" || mode === "login") && !password) { setStatus("Enter your password.", "error"); return; }
+        if ((mode === "signup" || mode === "reset") && !passwordValid(password)) { setStatus("Password must be 8+ chars and include a letter and number.", "error"); return; }
+        if ((mode === "signup" || mode === "reset") && password !== confirm) { setStatus("Passwords do not match.", "error"); return; }
+        if (mode === "reset" && !resetTokenValue) { setStatus("Reset link is invalid or expired. Request a new one.", "error"); return; }
+
         working = true;
         submitBtn.disabled = true;
         submitBtn.textContent =
-          mode === "signup"
-            ? "Creating..."
-            : mode === "login"
-              ? "Signing in..."
-              : mode === "forgot"
-                ? "Sending..."
-                : "Saving...";
+          mode === "signup" ? "Creating..." :
+          mode === "login" ? "Signing in..." :
+          mode === "forgot" ? "Sending..." : "Saving...";
         setStatus("", "");
         setCtaStatus("", "");
         toggleResend(false);
         toggleForgot(false);
+
         try {
           if (mode === "signup") {
             const data = await api("/auth/register", {
@@ -576,12 +548,8 @@
               toggleSignedIn(emailFromApi);
               try {
                 const me = await api("/me", { headers: { Authorization: "Bearer " + token } });
-                if (me && me.subscription) {
-                  updateSubscriptionUI(me.subscription);
-                }
-              } catch {
-                // ignore
-              }
+                if (me && me.subscription) updateSubscriptionUI(me.subscription);
+              } catch {}
             }
             setStatus("Password updated. You are now signed in.", "success");
             resetTokenValue = null;
@@ -589,7 +557,6 @@
             return;
           }
 
-          // login
           const data = await api("/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -601,41 +568,27 @@
             localStorage.setItem(TOKEN_KEY, token);
             try {
               const me = await api("/me", { headers: { Authorization: "Bearer " + token } });
-              if (me && me.subscription) {
-                updateSubscriptionUI(me.subscription);
-              }
-            } catch {
-              // ignore
-            }
+              if (me && me.subscription) updateSubscriptionUI(me.subscription);
+            } catch {}
           }
           setStatus("You are signed in. Open the app to start using PLO RangeLab.", "success");
           toggleSignedIn(emailFromApi);
-          if (data && data.subscription) {
-            updateSubscriptionUI(data.subscription);
-          }
+          if (data && data.subscription) updateSubscriptionUI(data.subscription);
           closeModal();
         } catch (err) {
           const msg = err instanceof Error ? err.message : "Unable to sign in right now.";
           setStatus(msg, "error");
           if (mode === "login") {
-            if (msg.toLowerCase().includes("confirm your email")) {
-              toggleResend(true);
-            }
-            if (msg.toLowerCase().includes("invalid credentials")) {
-              toggleForgot(true);
-            }
+            if (msg.toLowerCase().includes("confirm your email")) toggleResend(true);
+            if (msg.toLowerCase().includes("invalid credentials")) toggleForgot(true);
           }
         } finally {
           working = false;
           submitBtn.disabled = false;
           submitBtn.textContent =
-            mode === "signup"
-              ? "Create account"
-              : mode === "login"
-                ? "Log in"
-                : mode === "forgot"
-                  ? "Send reset link"
-                  : "Save new password";
+            mode === "signup" ? "Create account" :
+            mode === "login" ? "Log in" :
+            mode === "forgot" ? "Send reset link" : "Save new password";
         }
       });
 
@@ -650,10 +603,7 @@
           e.preventDefault();
           if (working) return;
           const email = emailInput.value.trim();
-          if (!email) {
-            setStatus("Enter your email to resend confirmation.", "error");
-            return;
-          }
+          if (!email) { setStatus("Enter your email to resend confirmation.", "error"); return; }
           working = true;
           resendBtn.disabled = true;
           setStatus("Sending confirmation email...", "info");
@@ -683,67 +633,40 @@
         });
       }
 
-      if (signupBtn) {
-        signupBtn.addEventListener("click", (e) => {
-          e.preventDefault();
-          openModal("signup");
-        });
-      }
-
-      if (planBtn) {
-        planBtn.addEventListener("click", (e) => {
-          e.preventDefault();
-          openPlanModal();
-        });
-      }
+      if (signupBtn) signupBtn.addEventListener("click", (e) => { e.preventDefault(); openModal("signup"); });
+      if (planBtn) planBtn.addEventListener("click", (e) => { e.preventDefault(); openPlanModal(); });
 
       if (payBtn) {
         payBtn.addEventListener("click", async (e) => {
           e.preventDefault();
-          if (!selectedPlan) {
-            setCtaStatus("Pick a plan first.", "error");
-            return;
-          }
+          if (!selectedPlan) { setCtaStatus("Pick a plan first.", "error"); return; }
           const token = localStorage.getItem(TOKEN_KEY);
-          if (!token) {
-            setCtaStatus("Please sign in first.", "error");
-            openModal("login");
-            return;
-          }
+          if (!token) { setCtaStatus("Please sign in first.", "error"); openModal("login"); return; }
+
           payBtn.disabled = true;
           payBtn.textContent = "Preparing checkout...";
           setCtaStatus("", "");
           setPaymentStatus("", "");
+
           try {
             const normalizedPlan = selectedPlan || "annual";
             const data = await api("/api/billing/create-nowpayments-payment", {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + token
-              },
+              headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
               body: JSON.stringify({ plan: normalizedPlan })
             });
 
-            if (data.orderId) {
-              startPaymentPolling(data.orderId, token);
-            }
+            if (data.orderId) startPaymentPolling(data.orderId, token);
 
             if (data.paymentUrl) {
               setPaymentStatus("Opening payment page in a new tab. Complete the payment to unlock access.", "info");
               window.open(data.paymentUrl, "_blank");
             } else if (data.payAddress) {
               const currencyLabel = (data.payCurrency || "USDT").toUpperCase();
-              if (payAmountEl) {
-                const amountText = data.payAmount ? `${data.payAmount} ${currencyLabel}` : currencyLabel;
-                payAmountEl.textContent = amountText;
-              }
+              if (payAmountEl) payAmountEl.textContent = data.payAmount ? `${data.payAmount} ${currencyLabel}` : currencyLabel;
               if (payAddressEl) payAddressEl.textContent = data.payAddress;
               if (paymentDetails) paymentDetails.classList.remove("hidden");
-              setPaymentStatus(
-                "Send the exact amount to the address above. We will confirm automatically once paid.",
-                "info"
-              );
+              setPaymentStatus("Send the exact amount to the address above. We will confirm automatically once paid.", "info");
             } else {
               setPaymentStatus("Payment created. Follow the instructions in the payment tab.", "info");
             }
@@ -757,52 +680,16 @@
         });
       }
 
-      if (loginBtn) {
-        loginBtn.addEventListener("click", (e) => {
-          e.preventDefault();
-          openModal("login");
-        });
-      }
+      if (loginBtn) loginBtn.addEventListener("click", (e) => { e.preventDefault(); openModal("login"); });
+      if (closeBtn) closeBtn.addEventListener("click", (e) => { e.preventDefault(); closeModal(); });
+      if (planClose) planClose.addEventListener("click", (e) => { e.preventDefault(); closePlanModal(); });
 
-      if (closeBtn) {
-        closeBtn.addEventListener("click", (e) => {
-          e.preventDefault();
-          closeModal();
-        });
-      }
-      if (planClose) {
-        planClose.addEventListener("click", (e) => {
-          e.preventDefault();
-          closePlanModal();
-        });
-      }
+      modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+      planModal.addEventListener("click", (e) => { if (e.target === planModal) closePlanModal(); });
 
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
-          closeModal();
-        }
-      });
-      planModal.addEventListener("click", (e) => {
-        if (e.target === planModal) {
-          closePlanModal();
-        }
-      });
+      window.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeModal(); closePlanModal(); } });
 
-      window.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-          closeModal();
-          closePlanModal();
-        }
-      });
-
-      if (logoutBtn) {
-        logoutBtn.addEventListener("click", (e) => {
-          e.preventDefault();
-          localStorage.removeItem(TOKEN_KEY);
-          toggleSignedIn(null);
-        });
-      }
-
+      if (logoutBtn) logoutBtn.addEventListener("click", (e) => { e.preventDefault(); localStorage.removeItem(TOKEN_KEY); toggleSignedIn(null); });
 
       const resetTokenFromUrl = takeResetTokenFromUrl();
       if (resetTokenFromUrl) {
@@ -813,14 +700,9 @@
 
       const initialToken = storeTokenFromUrl() || localStorage.getItem(TOKEN_KEY);
       loadSession(initialToken);
-      // If already logged in, refresh subscription UI via /me
       if (initialToken) {
         api("/me", { headers: { Authorization: "Bearer " + initialToken } })
-          .then((data) => {
-            if (data && data.subscription) {
-              updateSubscriptionUI(data.subscription);
-            }
-          })
+          .then((data) => { if (data && data.subscription) updateSubscriptionUI(data.subscription); })
           .catch(() => {});
       }
     })();
