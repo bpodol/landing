@@ -344,6 +344,52 @@ main.container {
   background: rgba(15, 23, 42, 0.35);
 }
 
+.footer-support {
+  display: flex;
+  justify-content: center;
+}
+
+.support-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(79, 70, 229, 0.12);
+  color: #e5e7eb;
+  font-weight: 600;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease, transform 120ms ease;
+}
+
+.support-link:hover {
+  text-decoration: none;
+  border-color: rgba(79, 70, 229, 0.55);
+  box-shadow: 0 0 0 4px var(--ring);
+  background: rgba(79, 70, 229, 0.18);
+}
+
+.support-icon {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(79, 70, 229, 0.14);
+  border: 1px solid rgba(79, 70, 229, 0.32);
+}
+
+.support-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.support-label {
+  font-size: 13px;
+}
+
 .terms-popup {
   position: absolute;
   left: 50%;
