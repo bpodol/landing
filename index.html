@@ -411,14 +411,19 @@
         const subExpiry = document.getElementById("sub-expiry");
         const upgradeBtn = document.getElementById("upgrade-plan");
 
-        const isActive = subscription && subscription.plan && subscription.status === "active";
+        const paid =
+          subscription &&
+          (subscription.effective_status === "paid" ||
+            subscription.paid_status === "active" ||
+            subscription.status === "active" ||
+            subscription.access);
+        const isActive = Boolean(subscription && subscription.plan && paid);
         if (pricing) pricing.classList.toggle("hidden", !!isActive);
         if (subSection) subSection.classList.toggle("hidden", !isActive);
         if (!isActive) return;
 
-        const isAnnual = subscription.plan === "yearly" || subscription.plan === "annual";
-        const planLabel = isAnnual ? "Pro Annual" : "Pro Monthly";
-        if (subPlan) subPlan.textContent = planLabel;
+        // Single plan: always show Pro subscription label
+        if (subPlan) subPlan.textContent = "Pro";
         if (subStatus) subStatus.textContent = "Subscription active";
         if (subExpiry && subscription.expires_at) {
           const exp = new Date(subscription.expires_at).toLocaleDateString();
