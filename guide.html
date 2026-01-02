@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PLO Range Lab — User Guide</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel:#0f1620;
+      --panel2:#0c121b;
+      --text:#e7eef7;
+      --muted:#a9b6c6;
+      --line:rgba(231,238,247,.12);
+      --accent:#7cc4ff;
+      --accent2:#a6ffcb;
+      --codebg:rgba(255,255,255,.06);
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 800px at 18% 8%, rgba(124,196,255,.16), transparent 60%),
+        radial-gradient(900px 700px at 90% 12%, rgba(166,255,203,.12), transparent 55%),
+        linear-gradient(160deg, #0b0f18 0%, #0d1324 48%, #0a0f19 100%);
+      color:var(--text);
+      line-height:1.6;
+    }
+    a{color:var(--accent); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 36px 20px 80px;
+    }
+    header{
+      display:flex;
+      gap:18px;
+      align-items:flex-start;
+      justify-content:space-between;
+      padding: 22px 22px;
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .header-meta{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:12px;
+      min-width:0;
+    }
+    .guide-logo{
+      width: 130px;
+      height: auto;
+      border-radius: 12px;
+      background: rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      padding: 8px 10px;
+      box-shadow: 0 12px 32px rgba(0,0,0,.35);
+    }
+    .title{min-width:0}
+    h1{
+      margin:0;
+      font-size: 28px;
+      letter-spacing: .2px;
+    }
+    .subtitle{
+      margin-top:6px;
+      color:var(--muted);
+      max-width: 64ch;
+      font-size: 14px;
+    }
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+      height: fit-content;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 260px 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+    nav{
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      padding: 14px;
+      border-radius: var(--radius);
+      border:1px solid var(--line);
+      background: rgba(15,22,32,.6);
+      backdrop-filter: blur(10px);
+    }
+    .nav-title{
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 4px 6px 10px;
+    }
+    .nav-list{
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+      margin:0;
+      padding:0 6px 6px;
+      list-style:none;
+    }
+    .nav-list a{
+      display:block;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border:1px solid transparent;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .nav-list a:hover{
+      border-color: var(--line);
+      background: rgba(255,255,255,.04);
+      text-decoration:none;
+    }
+
+    main{
+      padding: 18px;
+      border-radius: var(--radius);
+      border:1px solid var(--line);
+      background: rgba(15,22,32,.55);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+    }
+    section{
+      padding: 14px 10px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    section:last-child{border-bottom:0}
+    h2{
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing:.2px;
+    }
+    p{margin: 10px 0}
+    ul,ol{margin: 10px 0 0; padding-left: 20px}
+    li{margin: 6px 0}
+    .muted{color:var(--muted)}
+    code,kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: .95em;
+      background: var(--codebg);
+      border: 1px solid var(--line);
+      padding: 2px 6px;
+      border-radius: 8px;
+    }
+    pre{
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+      overflow:auto;
+      margin: 10px 0 0;
+    }
+    pre code{
+      background: transparent;
+      border: 0;
+      padding: 0;
+      border-radius: 0;
+      display:block;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .callout{
+      margin-top: 10px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+    }
+    .callout strong{
+      display:inline-block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      letter-spacing:.2px;
+    }
+    .callout.tip{border-color: rgba(166,255,203,.25)}
+    .callout.tip strong{color: var(--accent2)}
+    .callout.note{border-color: rgba(124,196,255,.25)}
+    .callout.note strong{color: var(--accent)}
+    .two-col{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    @media (max-width: 900px){
+      .grid{grid-template-columns: 1fr}
+      nav{position: static}
+      header{flex-direction:column; align-items:flex-start}
+      .header-meta{align-items:flex-start}
+      .two-col{grid-template-columns: 1fr}
+    }
+    @media print{
+      body{background:#fff; color:#000}
+      header, nav, main{box-shadow:none; backdrop-filter:none}
+      nav{display:none}
+      .grid{grid-template-columns: 1fr}
+      a{color:#000; text-decoration:underline}
+      code, pre{border-color:#ddd}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <h1>PLO Range Lab — User Guide</h1>
+        <div class="subtitle">
+          A quick, structured reference for ranges, equity, filters, and street-by-street workflow.
+        </div>
+      </div>
+      <div class="header-meta">
+        <img class="guide-logo" src="logo.png" alt="PLO Range Lab logo">
+        <div class="pill">
+          <span>Desktop app</span>
+          <span class="muted">•</span>
+          <span>PLO4 / PLO5</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <nav aria-label="Table of contents">
+        <div class="nav-title">Contents</div>
+        <ul class="nav-list">
+          <li><a href="#s1">1) Quick overview</a></li>
+          <li><a href="#s2">2) Create ranges (P1–P6)</a></li>
+          <li><a href="#s3">3) Save and reuse ranges</a></li>
+          <li><a href="#s4">4) Board and dead cards</a></li>
+          <li><a href="#s5">5) Compute equity</a></li>
+          <li><a href="#s6">6) Load filters (auto filters)</a></li>
+          <li><a href="#s7">7) Understand the filter panel</a></li>
+          <li><a href="#s8">8) Apply filters / Selected %</a></li>
+          <li><a href="#s9">9) Clear filters and undo</a></li>
+          <li><a href="#s10">10) Create custom filters (+Filter)</a></li>
+          <li><a href="#s11">11) Combine multiple filters</a></li>
+          <li><a href="#s12">12) Modify filters and groups</a></li>
+          <li><a href="#s13">13) Typical workflow</a></li>
+          <li><a href="#s14">14) Copy / export a range</a></li>
+        </ul>
+      </nav>
+
+      <main>
+        <section id="s1">
+          <h2>1) Quick overview</h2>
+          <p>PLO Range Lab lets you:</p>
+          <ul>
+            <li>Build up to 6 player ranges (P1–P6)</li>
+            <li>Add board + dead cards</li>
+            <li>Compute equity between 2+ ranges</li>
+            <li>Filter ranges using auto-generated hand categories (e.g., sets, straights, flushes) and custom filters</li>
+            <li>Move street-by-street: flop → turn → river, keeping filtered ranges as the new baseline</li>
+          </ul>
+        </section>
+
+        <section id="s2">
+          <h2>2) Create ranges (Player 1–Player 6)</h2>
+          <p>Each player panel has a range input. You can enter a range in three ways:</p>
+
+          <div class="callout note">
+            <strong>A) Presets / Saved ranges</strong>
+            <ul>
+              <li>Pick a ready-made preset</li>
+              <li>Or load one of your saved ranges</li>
+            </ul>
+          </div>
+
+          <div class="callout note">
+            <strong>B) % notation (ProPokerTools ordering)</strong>
+            <p class="muted">Use percentages to select the top hands by ordering:</p>
+            <ul>
+              <li><code>50%</code> = top 50% of hands</li>
+              <li><code>50%-7%</code> = top 50% excluding the top 7% (so you keep 43% total)</li>
+            </ul>
+          </div>
+
+          <div class="callout note">
+            <strong>C) Manual combos (PPT format, optional weights)</strong>
+            <p class="muted">Paste or type hands in standard ProPokerTools-style format, comma-separated:</p>
+            <pre><code>AsAcKhQd6s, AsKs8s7s6c
+AsAcKhQd6s@88, AsKs8s7s6c@50</code></pre>
+            <p class="muted">Hand without a weight defaults to <code>@100</code>.</p>
+          </div>
+        </section>
+
+        <section id="s3">
+          <h2>3) Save and reuse ranges</h2>
+          <p>After entering a range:</p>
+          <ol>
+            <li>Click <code>Save</code></li>
+            <li>Give it a name</li>
+          </ol>
+          <p>Now it appears in <strong>Saved ranges</strong> for future use.</p>
+        </section>
+
+        <section id="s4">
+          <h2>4) Set the board and dead cards</h2>
+
+          <div class="two-col">
+            <div class="callout">
+              <strong>Board cards</strong>
+              <p>Select 3, 4, or 5 board cards using the board selector.</p>
+            </div>
+            <div class="callout">
+              <strong>Dead cards</strong>
+              <p>Add dead cards to remove impossible combos.</p>
+              <p class="muted">Any combo containing a dead card is removed from all ranges automatically.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="s5">
+          <h2>5) Compute equity</h2>
+          <p>To calculate equity:</p>
+          <ol>
+            <li>Enter 2 or more ranges</li>
+            <li>(Optional) Set board + dead cards</li>
+            <li>Click <code>Compute</code></li>
+          </ol>
+          <div class="callout tip">
+            <strong>Important</strong>
+            <p>Equity always uses the <em>current state</em> of each range (including any applied filters).</p>
+          </div>
+        </section>
+
+        <section id="s6">
+          <h2>6) Load filters (auto filters)</h2>
+          <p>
+            When you have at least 1 range and a board, the app can generate automatic filter groups
+            (hand categories like sets, two pair, flushes, straights, etc.). These groups are the foundation for fast filtering.
+          </p>
+
+          <div class="two-col">
+            <div class="callout">
+              <strong>PLO4 behavior</strong>
+              <ul>
+                <li>Auto filters load automatically when the board changes.</li>
+                <li>If needed, press <code>Reload filters</code>.</li>
+              </ul>
+            </div>
+            <div class="callout">
+              <strong>PLO5 behavior</strong>
+              <p class="muted">Because ranges are much larger, loading is manual.</p>
+              <ul>
+                <li>After entering/changing the board, press <code>Load filters</code> to generate the automatic filters.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="s7">
+          <h2>7) Understand the filter panel</h2>
+          <p>When filters are loaded, you’ll see groups (categories). Click a group to expand and view the individual filters inside it.</p>
+          <p>For every filter, you’ll see a percentage showing how much of the range matches it.</p>
+          <p>You can select:</p>
+          <ul>
+            <li>An entire group (selects all filters inside)</li>
+            <li>Or only specific filters inside the group</li>
+          </ul>
+        </section>
+
+        <section id="s8">
+          <h2>8) Apply filters (and what “Selected %” means)</h2>
+          <p><strong>Apply filters</strong></p>
+          <ol>
+            <li>Select one or more filters (or groups)</li>
+            <li>Click <code>Apply filters</code></li>
+          </ol>
+          <p>Result:</p>
+          <ul>
+            <li>The range is reduced to only hands that match your selection</li>
+            <li>You’ll see <code>Selected: X%</code> (how much of the original current range remains)</li>
+          </ul>
+          <p class="muted">From this point on: equity, further filtering, and street progression use the filtered range as the new base.</p>
+
+          <div class="callout">
+            <strong>Invert filter</strong>
+            <p>Next to Apply, use <code>Invert filter</code> to do the opposite:</p>
+            <p class="muted">Instead of keeping hands that pass, it keeps hands that fail the selected filters.</p>
+          </div>
+        </section>
+
+        <section id="s9">
+          <h2>9) Clear filters and undo behavior</h2>
+
+          <div class="two-col">
+            <div class="callout">
+              <strong>Clear filters (global)</strong>
+              <p>Clear filters resets filters for all ranges (back to their “pre-filter” state for the current street).</p>
+            </div>
+            <div class="callout">
+              <strong>Clear (per player)</strong>
+              <p>Each range also has its own <code>Clear</code> button to reset filtering for that specific player only.</p>
+            </div>
+          </div>
+
+          <div class="callout note">
+            <strong>Street-by-street undo rule</strong>
+            <p>Filtering is tracked per street:</p>
+            <ul>
+              <li>If you filter on the flop, then add a turn and filter again: <code>Clear</code> / <code>Clear filters</code> removes only the turn filtering.</li>
+              <li>To undo an earlier street (e.g., flop filtering): remove the current street card(s) (e.g., remove the turn card), then press <code>Clear</code> / <code>Clear filters</code>.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="s10">
+          <h2>10) Create custom filters (+Filter)</h2>
+          <p>You can build your own filters beyond the auto groups.</p>
+          <p>Click <code>+Filter</code> and enter a filter using:</p>
+          <ul>
+            <li>Ranks: <code>2–A</code></li>
+            <li>Suits: <code>s</code>, <code>c</code>, <code>d</code>, <code>h</code></li>
+          </ul>
+
+          <div class="callout">
+            <strong>Common patterns</strong>
+            <ul>
+              <li><strong>Single rank</strong>: <code>A</code> → hands containing an Ace</li>
+              <li><strong>Specific card</strong>: <code>As</code> → hands containing Ace of spades</li>
+              <li><strong>Multiple ranks</strong>: <code>AK7</code> → hands containing A, K, and 7</li>
+              <li><strong>Mixed ranks + a suited requirement</strong>: <code>AKc7</code> → hands containing A and 7 (any suits), and K♣ specifically</li>
+            </ul>
+          </div>
+
+          <div class="callout">
+            <strong>Suit counts</strong>
+            <ul>
+              <li><code>d</code> → at least 1 diamond</li>
+              <li><code>dd</code> → at least 2 diamonds</li>
+              <li><code>ddd</code> → at least 3 diamonds (and so on)</li>
+            </ul>
+          </div>
+
+          <div class="callout note">
+            <strong>Excluding with “!”</strong>
+            <p>Add <code>!</code> to exclude anything after it:</p>
+            <p class="muted">Example idea: <code>X!Y</code> keeps hands matching X but removes those also matching Y</p>
+          </div>
+        </section>
+
+        <section id="s11">
+          <h2>11) Combine multiple filters in one input</h2>
+          <p>You can enter multiple filter tokens using commas or spaces:</p>
+
+          <div class="two-col">
+            <div class="callout">
+              <strong>Commas = OR</strong>
+              <pre><code>AA, cc, AsK</code></pre>
+              <p class="muted">Matches hands that contain at least one of: AA or cc or AsK</p>
+            </div>
+            <div class="callout">
+              <strong>Spaces / new lines = AND</strong>
+              <pre><code>AA cc Ks</code></pre>
+              <p class="muted">Matches hands that contain all of them together: AA AND cc AND Ks</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="s12">
+          <h2>12) Modify filters and groups (weights, +With, +Without)</h2>
+          <p>You can adjust an individual filter or a whole group.</p>
+
+          <div class="callout">
+            <strong>Weight adjustment</strong>
+            <p class="muted">Reducing weight lowers the contribution of matching combos (useful when you want a “partial” selection rather than a hard keep/remove).</p>
+          </div>
+
+          <div class="callout note">
+            <strong>+With (add required conditions)</strong>
+            <p>Adds extra conditions that must also be true.</p>
+            <p class="muted">Example:</p>
+            <ol>
+              <li>Open group <code>Sets</code></li>
+              <li>Click <code>+With</code></li>
+              <li>Choose an existing filter/group (e.g., <code>FD</code>)</li>
+              <li>Save</li>
+            </ol>
+            <p class="muted">Now “Sets” becomes “Sets with FD”: any hand passing the Sets filters must also satisfy FD.</p>
+
+            <div class="callout" style="margin-top:10px;">
+              <strong>All / Any toggle</strong>
+              <ul>
+                <li><strong>All</strong>: every selected <code>+With</code> condition must be satisfied</li>
+                <li><strong>Any</strong>: at least one selected <code>+With</code> condition must be satisfied</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout note">
+            <strong>+Without (exclude conditions)</strong>
+            <p>Works like <code>+With</code>, but removes hands that match the selected conditions.</p>
+          </div>
+
+          <div class="callout">
+            <strong>Custom input inside +With / +Without</strong>
+            <p class="muted">You don’t have to pick only existing groups— you can type a condition using the same syntax as custom filters.</p>
+          </div>
+        </section>
+
+        <section id="s13">
+          <h2>13) Typical workflow (recommended)</h2>
+          <ol>
+            <li>Choose PLO4 or PLO5</li>
+            <li>Enter ranges for 2–6 players (preset / saved / % / manual)</li>
+            <li>(Optional) Save ranges you’ll reuse</li>
+            <li>Set board + dead cards</li>
+            <li>Load filters (auto in PLO4, button in PLO5)</li>
+            <li>Select relevant filter groups (e.g., sets, wraps, flush draws)</li>
+            <li>Apply (or invert) filters</li>
+            <li>Compute equity</li>
+            <li>Add next street card and repeat filtering as needed</li>
+          </ol>
+        </section>
+
+        <section id="s14">
+          <h2>14) Copy / export a range</h2>
+          <p>At any time, click the copy icon to copy the current range (including all applied filtering) to your clipboard.</p>
+        </section>
+
+        <p class="muted" style="margin: 16px 10px 2px; font-size: 12px;">
+          Tip: Use your browser’s Find (Ctrl+F) to quickly locate keywords like “Reload filters”, “Selected”, or “+With”.
+        </p>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

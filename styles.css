@@ -28,11 +28,7 @@ body {
   margin: 0;
   font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--text);
-  background:
-    radial-gradient(900px 500px at 15% 10%, rgba(79, 70, 229, 0.22), transparent 60%),
-    radial-gradient(700px 400px at 85% 15%, rgba(109, 40, 217, 0.18), transparent 60%),
-    radial-gradient(900px 600px at 50% 110%, rgba(56, 189, 248, 0.08), transparent 55%),
-    linear-gradient(180deg, #050816 0%, #070a1a 40%, #050816 100%);
+  background: linear-gradient(180deg, #050816 0%, #0a1021 100%);
 }
 
 a {
@@ -57,12 +53,7 @@ a:hover {
 }
 
 .hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(135deg, rgba(79, 70, 229, 0.10), rgba(15, 23, 42, 0.55) 55%, rgba(5, 8, 22, 0));
-  pointer-events: none;
+  content: none;
 }
 
 .hero-content {
@@ -294,6 +285,38 @@ main.container {
   padding-left: 18px;
   color: var(--muted);
   line-height: 1.75;
+}
+
+.guide-link {
+  margin: 10px 0 0;
+}
+
+.pill-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(15, 23, 42, 0.4);
+  color: #e5e7eb;
+  font-weight: 600;
+  font-size: 13px;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.pill-link::after {
+  content: ">";
+  font-weight: 700;
+  font-size: 13px;
+  color: #cbd5e1;
+}
+
+.pill-link:hover {
+  text-decoration: none;
+  border-color: rgba(79, 70, 229, 0.6);
+  background: rgba(79, 70, 229, 0.14);
+  box-shadow: 0 0 0 4px var(--ring);
 }
 
 .hero-demo img {
