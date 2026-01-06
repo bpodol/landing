@@ -394,15 +394,15 @@ AsAcKhQd6s@88, AsKs8s7s6c@50</code></pre>
           <p class="muted">From this point on: equity, further filtering, and street progression use the filtered range as the new base.</p>
 
           <div class="callout">
-            <strong>Invert filter</strong>
-            <p>Next to Apply, use <code>Invert filter</code> to do the opposite:</p>
-            <p class="muted">Instead of keeping hands that pass, it keeps hands that fail the selected filters.</p>
+            <strong>Remove filters</strong>
+            <p>Next to Apply, use <code>Remove filters</code> to take out the matching hands:</p>
+            <p class="muted">Hands that pass the selected filters are removed from the range, and all percentages update accordingly.</p>
           </div>
 
           <div class="callout note">
-            <strong>Scope of Apply / Invert</strong>
-            <p>The main <code>Apply filters</code> and <code>Invert filter</code> actions are global: they update every range at once.</p>
-            <p>Each range also has its own Apply / Invert controls; those only change that specific range and leave the others untouched.</p>
+            <strong>Scope of Apply / Remove</strong>
+            <p>The main <code>Apply filters</code> and <code>Remove filters</code> actions are global: they update every range at once.</p>
+            <p>Each range also has its own Apply / Remove controls; those only change that specific range and leave the others untouched.</p>
           </div>
         </section>
 
@@ -445,6 +445,7 @@ AsAcKhQd6s@88, AsKs8s7s6c@50</code></pre>
               <li><strong>Single rank</strong>: <code>A</code> → hands containing an Ace</li>
               <li><strong>Specific card</strong>: <code>As</code> → hands containing Ace of spades</li>
               <li><strong>Multiple ranks</strong>: <code>AK7</code> → hands containing A, K, and 7</li>
+              <li><strong>Pocket pair shorthand</strong>: <code>pp</code> - any pocket pair (AA, KK, QQ, etc.)</li>
               <li><strong>Mixed ranks + a suited requirement</strong>: <code>AKc7</code> → hands containing A and 7 (any suits), and K♣ specifically</li>
             </ul>
           </div>
@@ -533,7 +534,7 @@ AsAcKhQd6s@88, AsKs8s7s6c@50</code></pre>
             <li>Set board + dead cards</li>
             <li>Load filters (auto in PLO4, button in PLO5)</li>
             <li>Select relevant filter groups (e.g., sets, wraps, flush draws)</li>
-            <li>Apply (or invert) filters</li>
+            <li>Apply (or remove) filters</li>
             <li>Compute equity</li>
             <li>Add next street card and repeat filtering as needed</li>
           </ol>
