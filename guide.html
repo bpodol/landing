@@ -221,335 +221,691 @@
       a{color:#000; text-decoration:underline}
       code, pre{border-color:#ddd}
     }
+
+    /* --- Language switcher (added, minimal, fits existing style) --- */
+    .lang-switch{
+      display:flex;
+      gap:8px;
+      justify-content:flex-end;
+    }
+    .lang-switch button{
+      appearance:none;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      cursor:pointer;
+      line-height: 1;
+    }
+    .lang-switch button:hover{
+      background: rgba(255,255,255,.06);
+    }
+    .lang-switch button[aria-pressed="true"]{
+      border-color: rgba(124,196,255,.45);
+      box-shadow: 0 0 0 3px rgba(124,196,255,.12);
+    }
+
+    /* RU-only style difference from your original RU file */
+    html[lang="ru"] .callout.note{border-color: rgba(124,255,255,.25)}
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="title">
-        <h1>PLO Range Lab — User Guide</h1>
-      </div>
-      <div class="header-meta">
-        <img class="guide-logo" src="logo.png" alt="PLO Range Lab logo">
-        <div class="pill">
-          <span>Desktop app</span>
-          <span class="muted">•</span>
-          <span>PLO4 / PLO5</span>
-        </div>
-      </div>
-    </header>
+  <div id="mount"></div>
 
-    <div class="grid">
-      <nav aria-label="Table of contents">
-        <div class="nav-title">Contents</div>
-        <ul class="nav-list">
-          <li><a href="#s1">1) Quick overview</a></li>
-          <li><a href="#s2">2) Create ranges (P1–P6)</a></li>
-          <li><a href="#s3">3) Save and reuse ranges</a></li>
-          <li><a href="#s4">4) Board and dead cards</a></li>
-          <li><a href="#s5">5) Compute equity</a></li>
-          <li><a href="#s6">6) Load filters (auto filters)</a></li>
-          <li><a href="#s7">7) Understand the filter panel</a></li>
-          <li><a href="#s8">8) Apply filters / Selected %</a></li>
-          <li><a href="#s9">9) Clear filters and undo</a></li>
-          <li><a href="#s10">10) Create custom filters (+Filter)</a></li>
-          <li><a href="#s11">11) Combine multiple filters</a></li>
-          <li><a href="#s12">12) Modify filters and groups</a></li>
-          <li><a href="#s13">13) Typical workflow</a></li>
-          <li><a href="#s14">14) Copy / export a range</a></li>
-        </ul>
-      </nav>
-
-      <main>
-        <section id="s1">
-          <h2>1) Quick overview</h2>
-          <p>PLO Range Lab lets you:</p>
-          <ul>
-            <li>Build up to 6 player ranges (P1–P6)</li>
-            <li>Add board + dead cards</li>
-            <li>Compute equity between 2+ ranges</li>
-            <li>Filter ranges using auto-generated hand categories (e.g., sets, straights, flushes) and custom filters</li>
-            <li>Move street-by-street: flop → turn → river, keeping filtered ranges as the new baseline</li>
-          </ul>
-        </section>
-
-        <section id="s2">
-          <h2>2) Create ranges (Player 1–Player 6)</h2>
-          <p>Each player panel has a range input. You can enter a range in three ways:</p>
-
-          <div class="callout note">
-            <strong>A) Presets / Saved ranges</strong>
-            <ul>
-              <li>Pick a ready-made preset</li>
-              <li>Or load one of your saved ranges</li>
-            </ul>
-          </div>
-
-          <div class="callout note">
-            <strong>B) % notation (ProPokerTools ordering)</strong>
-            <p class="muted">Use percentages to select the top hands by ordering:</p>
-            <ul>
-              <li><code>50%</code> = top 50% of hands</li>
-              <li><code>50%-7%</code> = top 50% excluding the top 7% (so you keep 43% total)</li>
-            </ul>
-          </div>
-
-          <div class="callout note">
-            <strong>C) Manual combos (PPT format, optional weights)</strong>
-            <p class="muted">Paste or type hands in standard ProPokerTools-style format, comma-separated:</p>
-            <pre><code>AsAcKhQd6s, AsKs8s7s6c
+  <!-- English version (original markup + added switcher) -->
+  <template id="tpl-en">
+<div class="wrap">
+<header>
+<div class="title">
+<h1>PLO Range Lab — User Guide</h1>
+</div>
+<div class="header-meta">
+<img alt="PLO Range Lab logo" class="guide-logo" src="logo.png"/>
+<div class="pill">
+<span>Desktop app</span>
+<span class="muted">•</span>
+<span>PLO4 / PLO5</span>
+</div>
+<div class="lang-switch">
+<button type="button" data-lang="en" aria-label="English">EN</button>
+<button type="button" data-lang="ru" aria-label="Русский">RU</button>
+</div>
+</div>
+</header>
+<div class="grid">
+<nav aria-label="Table of contents">
+<div class="nav-title">Contents</div>
+<ul class="nav-list">
+<li><a href="#s1">1) Quick overview</a></li>
+<li><a href="#s2">2) Create ranges (P1–P6)</a></li>
+<li><a href="#s3">3) Save and reuse ranges</a></li>
+<li><a href="#s4">4) Board and dead cards</a></li>
+<li><a href="#s5">5) Compute equity</a></li>
+<li><a href="#s6">6) Load filters (auto filters)</a></li>
+<li><a href="#s7">7) Understand the filter panel</a></li>
+<li><a href="#s8">8) Apply filters / Selected %</a></li>
+<li><a href="#s9">9) Clear filters and undo</a></li>
+<li><a href="#s10">10) Create custom filters (+Filter)</a></li>
+<li><a href="#s11">11) Combine multiple filters</a></li>
+<li><a href="#s12">12) Modify filters and groups</a></li>
+<li><a href="#s13">13) Typical workflow</a></li>
+<li><a href="#s14">14) Copy / export a range</a></li>
+</ul>
+</nav>
+<main>
+<section id="s1">
+<h2>1) Quick overview</h2>
+<p>PLO Range Lab lets you:</p>
+<ul>
+<li>Build up to 6 player ranges (P1–P6)</li>
+<li>Add board + dead cards</li>
+<li>Compute equity between 2+ ranges</li>
+<li>Filter ranges using auto-generated hand categories (e.g., sets, straights, flushes) and custom filters</li>
+<li>Move street-by-street: flop → turn → river, keeping filtered ranges as the new baseline</li>
+</ul>
+</section>
+<section id="s2">
+<h2>2) Create ranges (Player 1–Player 6)</h2>
+<p>Each player panel has a range input. You can enter a range in three ways:</p>
+<div class="callout note">
+<strong>A) Presets / Saved ranges</strong>
+<ul>
+<li>Pick a ready-made preset</li>
+<li>Or load one of your saved ranges</li>
+</ul>
+</div>
+<div class="callout note">
+<strong>B) % notation (ProPokerTools ordering)</strong>
+<p class="muted">Use percentages to select the top hands by ordering:</p>
+<ul>
+<li><code>50%</code> = top 50% of hands</li>
+<li><code>50%-7%</code> = top 50% excluding the top 7% (so you keep 43% total)</li>
+</ul>
+</div>
+<div class="callout note">
+<strong>C) Manual combos (PPT format, optional weights)</strong>
+<p class="muted">Paste or type hands in standard ProPokerTools-style format, comma-separated:</p>
+<pre><code>AsAcKhQd6s, AsKs8s7s6c
 AsAcKhQd6s@88, AsKs8s7s6c@50</code></pre>
-            <p class="muted">Hand without a weight defaults to <code>@100</code>.</p>
-          </div>
-        </section>
-
-        <section id="s3">
-          <h2>3) Save and reuse ranges</h2>
-          <p>After entering a range:</p>
-          <ol>
-            <li>Click <code>Save</code></li>
-            <li>Give it a name</li>
-          </ol>
-          <p>Now it appears in <strong>Saved ranges</strong> for future use.</p>
-        </section>
-
-        <section id="s4">
-          <h2>4) Set the board and dead cards</h2>
-
-          <div class="two-col">
-            <div class="callout">
-              <strong>Board cards</strong>
-              <p>Select 3, 4, or 5 board cards using the board selector.</p>
-            </div>
-            <div class="callout">
-              <strong>Dead cards</strong>
-              <p>Add dead cards to remove impossible combos.</p>
-              <p class="muted">Any combo containing a dead card is removed from all ranges automatically.</p>
-            </div>
-          </div>
-        </section>
-
-        <section id="s5">
-          <h2>5) Compute equity</h2>
-          <p>To calculate equity:</p>
-          <ol>
-            <li>Enter 2 or more ranges</li>
-            <li>(Optional) Set board + dead cards</li>
-            <li>Click <code>Compute</code></li>
-          </ol>
-          <div class="callout tip">
-            <strong>Important</strong>
-            <p>Equity always uses the <em>current state</em> of each range (including any applied filters).</p>
-          </div>
-        </section>
-
-        <section id="s6">
-          <h2>6) Load filters (auto filters)</h2>
-          <p>
+<p class="muted">Hand without a weight defaults to <code>@100</code>.</p>
+</div>
+</section>
+<section id="s3">
+<h2>3) Save and reuse ranges</h2>
+<p>After entering a range:</p>
+<ol>
+<li>Click <code>Save</code></li>
+<li>Give it a name</li>
+</ol>
+<p>Now it appears in <strong>Saved ranges</strong> for future use.</p>
+</section>
+<section id="s4">
+<h2>4) Set the board and dead cards</h2>
+<div class="two-col">
+<div class="callout">
+<strong>Board cards</strong>
+<p>Select 3, 4, or 5 board cards using the board selector.</p>
+</div>
+<div class="callout">
+<strong>Dead cards</strong>
+<p>Add dead cards to remove impossible combos.</p>
+<p class="muted">Any combo containing a dead card is removed from all ranges automatically.</p>
+</div>
+</div>
+</section>
+<section id="s5">
+<h2>5) Compute equity</h2>
+<p>To calculate equity:</p>
+<ol>
+<li>Enter 2 or more ranges</li>
+<li>(Optional) Set board + dead cards</li>
+<li>Click <code>Compute</code></li>
+</ol>
+<div class="callout tip">
+<strong>Important</strong>
+<p>Equity always uses the <em>current state</em> of each range (including any applied filters).</p>
+</div>
+</section>
+<section id="s6">
+<h2>6) Load filters (auto filters)</h2>
+<p>
             When you have at least 1 range and a board, the app can generate automatic filter groups
             (hand categories like sets, two pair, flushes, straights, etc.). These groups are the foundation for fast filtering.
           </p>
-
-          <div class="two-col">
-            <div class="callout">
-              <strong>PLO4 behavior</strong>
-              <ul>
-                <li>Auto filters load automatically when the board changes.</li>
-                <li>If needed, press <code>Reload filters</code>.</li>
-              </ul>
-            </div>
-            <div class="callout">
-              <strong>PLO5 behavior</strong>
-              <p class="muted">Because ranges are much larger, loading is manual.</p>
-              <ul>
-                <li>After entering/changing the board, press <code>Load filters</code> to generate the automatic filters.</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <section id="s7">
-          <h2>7) Understand the filter panel</h2>
-          <p>When filters are loaded, you’ll see groups (categories). Click a group to expand and view the individual filters inside it.</p>
-          <p>For every filter, you’ll see a percentage showing how much of the range matches it.</p>
-          <p>You can select:</p>
-          <ul>
-            <li>An entire group (selects all filters inside)</li>
-            <li>Or only specific filters inside the group</li>
-          </ul>
-        </section>
-
-        <section id="s8">
-          <h2>8) Apply filters (and what “Selected %” means)</h2>
-          <p><strong>Apply filters</strong></p>
-          <ol>
-            <li>Select one or more filters (or groups)</li>
-            <li>Click <code>Apply filters</code></li>
-          </ol>
-          <p>Result:</p>
-          <ul>
-            <li>The range is reduced to only hands that match your selection</li>
-            <li>You’ll see <code>Selected: X%</code> (how much of the original current range remains)</li>
-          </ul>
-          <p class="muted">From this point on: equity, further filtering, and street progression use the filtered range as the new base.</p>
-
-          <div class="callout">
-            <strong>Remove filters</strong>
-            <p>Next to Apply, use <code>Remove filters</code> to take out the matching hands:</p>
-            <p class="muted">Hands that pass the selected filters are removed from the range, and all percentages update accordingly.</p>
-          </div>
-
-          <div class="callout note">
-            <strong>Scope of Apply / Remove</strong>
-            <p>The main <code>Apply filters</code> and <code>Remove filters</code> actions are global: they update every range at once.</p>
-            <p>Each range also has its own Apply / Remove controls; those only change that specific range and leave the others untouched.</p>
-          </div>
-        </section>
-
-        <section id="s9">
-          <h2>9) Clear filters and undo behavior</h2>
-
-          <div class="two-col">
-            <div class="callout">
-              <strong>Clear filters (global)</strong>
-              <p>Clear filters resets filters for all ranges (back to their “pre-filter” state for the current street).</p>
-            </div>
-            <div class="callout">
-              <strong>Clear (per player)</strong>
-              <p>Each range also has its own <code>Clear</code> button to reset filtering for that specific player only.</p>
-            </div>
-          </div>
-
-          <div class="callout note">
-            <strong>Street-by-street undo rule</strong>
-            <p>Filtering is tracked per street:</p>
-            <ul>
-              <li>If you filter on the flop, then add a turn and filter again: <code>Clear</code> / <code>Clear filters</code> removes only the turn filtering.</li>
-              <li>To undo an earlier street (e.g., flop filtering): remove the current street card(s) (e.g., remove the turn card), then press <code>Clear</code> / <code>Clear filters</code>.</li>
-            </ul>
-          </div>
-        </section>
-
-        <section id="s10">
-          <h2>10) Create custom filters (+Filter)</h2>
-          <p>You can build your own filters beyond the auto groups.</p>
-          <p>Click <code>+Filter</code> and enter a filter using:</p>
-          <ul>
-            <li>Ranks: <code>2–A</code></li>
-            <li>Suits: <code>s</code>, <code>c</code>, <code>d</code>, <code>h</code></li>
-          </ul>
-
-          <div class="callout">
-            <strong>Common patterns</strong>
-            <ul>
-              <li><strong>Single rank</strong>: <code>A</code> → hands containing an Ace</li>
-              <li><strong>Specific card</strong>: <code>As</code> → hands containing Ace of spades</li>
-              <li><strong>Multiple ranks</strong>: <code>AK7</code> → hands containing A, K, and 7</li>
-              <li><strong>Pocket pair shorthand</strong>: <code>pp</code> - any pocket pair (AA, KK, QQ, etc.)</li>
-              <li><strong>Mixed ranks + a suited requirement</strong>: <code>AKc7</code> → hands containing A and 7 (any suits), and K♣ specifically</li>
-            </ul>
-          </div>
-
-          <div class="callout">
-            <strong>Suit counts</strong>
-            <ul>
-              <li><code>d</code> → at least 1 diamond</li>
-              <li><code>dd</code> → at least 2 diamonds</li>
-              <li><code>ddd</code> → at least 3 diamonds (and so on)</li>
-            </ul>
-          </div>
-
-          <div class="callout note">
-            <strong>Excluding with “!”</strong>
-            <p>Add <code>!</code> to exclude anything after it:</p>
-            <p class="muted">Example idea: <code>X!Y</code> keeps hands matching X but removes those also matching Y</p>
-          </div>
-        </section>
-
-        <section id="s11">
-          <h2>11) Combine multiple filters in one input</h2>
-          <p>You can enter multiple filter tokens using commas or spaces:</p>
-
-          <div class="two-col">
-            <div class="callout">
-              <strong>Commas = OR</strong>
-              <pre><code>AA, cc, AsK</code></pre>
-              <p class="muted">Matches hands that contain at least one of: AA or cc or AsK</p>
-            </div>
-            <div class="callout">
-              <strong>Spaces / new lines = AND</strong>
-              <pre><code>AA cc Ks</code></pre>
-              <p class="muted">Matches hands that contain all of them together: AA AND cc AND Ks</p>
-            </div>
-          </div>
-        </section>
-
-        <section id="s12">
-          <h2>12) Modify filters and groups (weights, +With, +Without)</h2>
-          <p>You can adjust an individual filter or a whole group.</p>
-
-          <div class="callout">
-            <strong>Weight adjustment</strong>
-            <p class="muted">Reducing weight lowers the contribution of matching combos (useful when you want a “partial” selection rather than a hard keep/remove).</p>
-          </div>
-
-          <div class="callout note">
-            <strong>+With (add required conditions)</strong>
-            <p>Adds extra conditions that must also be true.</p>
-            <p class="muted">Example:</p>
-            <ol>
-              <li>Open group <code>Sets</code></li>
-              <li>Click <code>+With</code></li>
-              <li>Choose an existing filter/group (e.g., <code>FD</code>)</li>
-              <li>Save</li>
-            </ol>
-            <p class="muted">Now “Sets” becomes “Sets with FD”: any hand passing the Sets filters must also satisfy FD.</p>
-
-            <div class="callout" style="margin-top:10px;">
-              <strong>All / Any toggle</strong>
-              <ul>
-                <li><strong>All</strong>: every selected <code>+With</code> condition must be satisfied</li>
-                <li><strong>Any</strong>: at least one selected <code>+With</code> condition must be satisfied</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="callout note">
-            <strong>+Without (exclude conditions)</strong>
-            <p>Works like <code>+With</code>, but removes hands that match the selected conditions.</p>
-          </div>
-
-          <div class="callout">
-            <strong>Custom input inside +With / +Without</strong>
-            <p class="muted">You don’t have to pick only existing groups— you can type a condition using the same syntax as custom filters.</p>
-          </div>
-        </section>
-
-        <section id="s13">
-          <h2>13) Typical workflow (recommended)</h2>
-          <ol>
-            <li>Choose PLO4 or PLO5</li>
-            <li>Enter ranges for 2–6 players (preset / saved / % / manual)</li>
-            <li>(Optional) Save ranges you’ll reuse</li>
-            <li>Set board + dead cards</li>
-            <li>Load filters (auto in PLO4, button in PLO5)</li>
-            <li>Select relevant filter groups (e.g., sets, wraps, flush draws)</li>
-            <li>Apply (or remove) filters</li>
-            <li>Compute equity</li>
-            <li>Add next street card and repeat filtering as needed</li>
-          </ol>
-        </section>
-
-        <section id="s14">
-          <h2>14) Copy / export a range</h2>
-          <p>At any time, click the copy icon to copy the current range (including all applied filtering) to your clipboard.</p>
-        </section>
-
-        <p class="muted" style="margin: 16px 10px 2px; font-size: 12px;">
+<div class="two-col">
+<div class="callout">
+<strong>PLO4 behavior</strong>
+<ul>
+<li>Auto filters load automatically when the board changes.</li>
+<li>If needed, press <code>Reload filters</code>.</li>
+</ul>
+</div>
+<div class="callout">
+<strong>PLO5 behavior</strong>
+<p class="muted">Because ranges are much larger, loading is manual.</p>
+<ul>
+<li>After entering/changing the board, press <code>Load filters</code> to generate the automatic filters.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="s7">
+<h2>7) Understand the filter panel</h2>
+<p>When filters are loaded, you’ll see groups (categories). Click a group to expand and view the individual filters inside it.</p>
+<p>For every filter, you’ll see a percentage showing how much of the range matches it.</p>
+<p>You can select:</p>
+<ul>
+<li>An entire group (selects all filters inside)</li>
+<li>Or only specific filters inside the group</li>
+</ul>
+</section>
+<section id="s8">
+<h2>8) Apply filters (and what “Selected %” means)</h2>
+<p><strong>Apply filters</strong></p>
+<ol>
+<li>Select one or more filters (or groups)</li>
+<li>Click <code>Apply filters</code></li>
+</ol>
+<p>Result:</p>
+<ul>
+<li>The range is reduced to only hands that match your selection</li>
+<li>You’ll see <code>Selected: X%</code> (how much of the original current range remains)</li>
+</ul>
+<p class="muted">From this point on: equity, further filtering, and street progression use the filtered range as the new base.</p>
+<div class="callout">
+<strong>Remove filters</strong>
+<p>Next to Apply, use <code>Remove filters</code> to take out the matching hands:</p>
+<p class="muted">Hands that pass the selected filters are removed from the range, and all percentages update accordingly.</p>
+</div>
+<div class="callout note">
+<strong>Scope of Apply / Remove</strong>
+<p>The main <code>Apply filters</code> and <code>Remove filters</code> actions are global: they update every range at once.</p>
+<p>Each range also has its own Apply / Remove controls; those only change that specific range and leave the others untouched.</p>
+</div>
+</section>
+<section id="s9">
+<h2>9) Clear filters and undo behavior</h2>
+<div class="two-col">
+<div class="callout">
+<strong>Clear filters (global)</strong>
+<p>Clear filters resets filters for all ranges (back to their “pre-filter” state for the current street).</p>
+</div>
+<div class="callout">
+<strong>Clear (per player)</strong>
+<p>Each range also has its own <code>Clear</code> button to reset filtering for that specific player only.</p>
+</div>
+</div>
+<div class="callout note">
+<strong>Street-by-street undo rule</strong>
+<p>Filtering is tracked per street:</p>
+<ul>
+<li>If you filter on the flop, then add a turn and filter again: <code>Clear</code> / <code>Clear filters</code> removes only the turn filtering.</li>
+<li>To undo an earlier street (e.g., flop filtering): remove the current street card(s) (e.g., remove the turn card), then press <code>Clear</code> / <code>Clear filters</code>.</li>
+</ul>
+</div>
+</section>
+<section id="s10">
+<h2>10) Create custom filters (+Filter)</h2>
+<p>You can build your own filters beyond the auto groups.</p>
+<p>Click <code>+Filter</code> and enter a filter using:</p>
+<ul>
+<li>Ranks: <code>2–A</code></li>
+<li>Suits: <code>s</code>, <code>c</code>, <code>d</code>, <code>h</code></li>
+</ul>
+<div class="callout">
+<strong>Common patterns</strong>
+<ul>
+<li><strong>Single rank</strong>: <code>A</code> → hands containing an Ace</li>
+<li><strong>Specific card</strong>: <code>As</code> → hands containing Ace of spades</li>
+<li><strong>Multiple ranks</strong>: <code>AK7</code> → hands containing A, K, and 7</li>
+<li><strong>Pocket pair shorthand</strong>: <code>pp</code> - any pocket pair (AA, KK, QQ, etc.)</li>
+<li><strong>Mixed ranks + a suited requirement</strong>: <code>AKc7</code> → hands containing A and 7 (any suits), and K♣ specifically</li>
+</ul>
+</div>
+<div class="callout">
+<strong>Suit counts</strong>
+<ul>
+<li><code>d</code> → at least 1 diamond</li>
+<li><code>dd</code> → at least 2 diamonds</li>
+<li><code>ddd</code> → at least 3 diamonds (and so on)</li>
+</ul>
+</div>
+<div class="callout note">
+<strong>Excluding with “!”</strong>
+<p>Add <code>!</code> to exclude anything after it:</p>
+<p class="muted">Example idea: <code>X!Y</code> keeps hands matching X but removes those also matching Y</p>
+</div>
+</section>
+<section id="s11">
+<h2>11) Combine multiple filters in one input</h2>
+<p>You can enter multiple filter tokens using commas or spaces:</p>
+<div class="two-col">
+<div class="callout">
+<strong>Commas = OR</strong>
+<pre><code>AA, cc, AsK</code></pre>
+<p class="muted">Matches hands that contain at least one of: AA or cc or AsK</p>
+</div>
+<div class="callout">
+<strong>Spaces / new lines = AND</strong>
+<pre><code>AA cc Ks</code></pre>
+<p class="muted">Matches hands that contain all of them together: AA AND cc AND Ks</p>
+</div>
+</div>
+</section>
+<section id="s12">
+<h2>12) Modify filters and groups (weights, +With, +Without)</h2>
+<p>You can adjust an individual filter or a whole group.</p>
+<div class="callout">
+<strong>Weight adjustment</strong>
+<p class="muted">Reducing weight lowers the contribution of matching combos (useful when you want a “partial” selection rather than a hard keep/remove).</p>
+</div>
+<div class="callout note">
+<strong>+With (add required conditions)</strong>
+<p>Adds extra conditions that must also be true.</p>
+<p class="muted">Example:</p>
+<ol>
+<li>Open group <code>Sets</code></li>
+<li>Click <code>+With</code></li>
+<li>Choose an existing filter/group (e.g., <code>FD</code>)</li>
+<li>Save</li>
+</ol>
+<p class="muted">Now “Sets” becomes “Sets with FD”: any hand passing the Sets filters must also satisfy FD.</p>
+<div class="callout" style="margin-top:10px;">
+<strong>All / Any toggle</strong>
+<ul>
+<li><strong>All</strong>: every selected <code>+With</code> condition must be satisfied</li>
+<li><strong>Any</strong>: at least one selected <code>+With</code> condition must be satisfied</li>
+</ul>
+</div>
+</div>
+<div class="callout note">
+<strong>+Without (exclude conditions)</strong>
+<p>Works like <code>+With</code>, but removes hands that match the selected conditions.</p>
+</div>
+<div class="callout">
+<strong>Custom input inside +With / +Without</strong>
+<p class="muted">You don’t have to pick only existing groups— you can type a condition using the same syntax as custom filters.</p>
+</div>
+</section>
+<section id="s13">
+<h2>13) Typical workflow (recommended)</h2>
+<ol>
+<li>Choose PLO4 or PLO5</li>
+<li>Enter ranges for 2–6 players (preset / saved / % / manual)</li>
+<li>(Optional) Save ranges you’ll reuse</li>
+<li>Set board + dead cards</li>
+<li>Load filters (auto in PLO4, button in PLO5)</li>
+<li>Select relevant filter groups (e.g., sets, wraps, flush draws)</li>
+<li>Apply (or remove) filters</li>
+<li>Compute equity</li>
+<li>Add next street card and repeat filtering as needed</li>
+</ol>
+</section>
+<section id="s14">
+<h2>14) Copy / export a range</h2>
+<p>At any time, click the copy icon to copy the current range (including all applied filtering) to your clipboard.</p>
+</section>
+<p class="muted" style="margin: 16px 10px 2px; font-size: 12px;">
           Tip: Use your browser’s Find (Ctrl+F) to quickly locate keywords like “Reload filters”, “Selected”, or “+With”.
         </p>
-      </main>
-    </div>
-  </div>
+</main>
+</div>
+</div>
+  </template>
+
+  <!-- Russian version (original markup + added switcher) -->
+  <template id="tpl-ru">
+<div class="wrap">
+<header>
+<div class="title">
+<h1>PLO Range Lab — Гайд пользователя</h1>
+</div>
+<div class="header-meta">
+<img alt="PLO Range Lab logo" class="guide-logo" src="logo.png"/>
+<div class="pill">
+<span>Десктоп-апп</span>
+<span class="muted">•</span>
+<span>PLO4 / PLO5</span>
+</div>
+<div class="lang-switch">
+<button type="button" data-lang="en" aria-label="English">EN</button>
+<button type="button" data-lang="ru" aria-label="Русский">RU</button>
+</div>
+</div>
+</header>
+<div class="grid">
+<nav aria-label="Table of contents">
+<div class="nav-title">Содержание</div>
+<ul class="nav-list">
+<li><a href="#s1">1) Быстрый обзор</a></li>
+<li><a href="#s2">2) Создание диапазонов (P1–P6)</a></li>
+<li><a href="#s3">3) Сохранение и повторное использование диапазонов</a></li>
+<li><a href="#s4">4) Борд и мертвые карты</a></li>
+<li><a href="#s5">5) Подсчёт эквити</a></li>
+<li><a href="#s6">6) Load filters (авто-фильтры)</a></li>
+<li><a href="#s7">7) Как читать панель фильтров</a></li>
+<li><a href="#s8">8) Apply filters / что значит Selected %</a></li>
+<li><a href="#s9">9) Clear filters и логика по улицам</a></li>
+<li><a href="#s10">10) Кастомные фильтры (+Filter)</a></li>
+<li><a href="#s11">11) Комбинация нескольких фильтров</a></li>
+<li><a href="#s12">12) Редактирование фильтров и групп (weight(вес), +With, +Without)</a></li>
+<li><a href="#s13">13) Типовой сценарий</a></li>
+<li><a href="#s14">14) Copy / экспорт диапазона</a></li>
+</ul>
+</nav>
+<main>
+<section id="s1">
+<h2>1) Быстрый обзор</h2>
+<p>PLO Range Lab позволяет:</p>
+<ul>
+<li>Создать до 6 диапазонов игроков (P1–P6)</li>
+<li>Задать борд + мертвые карты</li>
+<li>Считать эквити между 2+ диапазонами</li>
+<li>Фильтровать диапазоны по авто-категориям (например, сеты, стриты, флеши) и по кастомным фильтрам</li>
+<li>Фильтровать улица за улицей: flop → turn → river, фиксируя отфильтрованный диапазон</li>
+</ul>
+</section>
+<section id="s2">
+<h2>2) Создание диапазонов (Player 1–Player 6)</h2>
+<p>У каждого игрока есть поле ввода диапазона. Задать диапазон можно тремя способами:</p>
+<div class="callout note">
+<strong>A) Presets / Saved ranges</strong>
+<ul>
+<li>Выбираешь готовый пресет</li>
+<li>Или подгружаешь один из своих сохранённых диапазонов</li>
+</ul>
+</div>
+<div class="callout note">
+<strong>B) % notation (ProPokerTools ordering)</strong>
+<p class="muted">Проценты выбирают топ рук по сортировке (ordering) как в ProPokerTools:</p>
+<ul>
+<li><code>50%</code> = топ 50% рук</li>
+<li><code>50%-7%</code> = топ 50% минус самые топовые 7% (остаётся 43% суммарно)</li>
+</ul>
+</div>
+<div class="callout note">
+<strong>C) Manual combos (PPT format, optional weights)</strong>
+<p class="muted">Вставляй/пиши комбинации в стандартном формате ProPokerTools, через запятую:</p>
+<pre><code>AsAcKhQd6s, AsKs8s7s6c
+AsAcKhQd6s@88, AsKs8s7s6c@50</code></pre>
+<p class="muted">Комбинация без веса считается как <code>@100</code>.</p>
+</div>
+</section>
+<section id="s3">
+<h2>3) Сохранение и повторное использование диапазонов</h2>
+<p>После того как ввёл диапазон:</p>
+<ol>
+<li>Нажми <code>Save</code></li>
+<li>Дай ему название</li>
+</ol>
+<p>После этого он появится в <strong>Saved ranges</strong> — можно быстро переиспользовать в следующих спотах.</p>
+</section>
+<section id="s4">
+<h2>4) Задай борд и мертвые карты</h2>
+<div class="two-col">
+<div class="callout">
+<strong>Board cards</strong>
+<p>Выбери 3, 4 или 5 карт борда через селектор.</p>
+</div>
+<div class="callout">
+<strong>Мертвые карты</strong>
+<p>Добавь мертвые карты, чтобы выкинуть невозможные комбинации.</p>
+<p class="muted">Любая Комбинация, которая содержит мертвую карту, автоматически удаляется из всех диапазонов.</p>
+</div>
+</div>
+</section>
+<section id="s5">
+<h2>5) Подсчёт эквити</h2>
+<p>Чтобы посчитать эквити:</p>
+<ol>
+<li>Введи 2 или больше диапазонов</li>
+<li>(Опционально) Задай борд + мертвые карты</li>
+<li>Нажми <code>Compute</code></li>
+</ol>
+<div class="callout tip">
+<strong>Важно</strong>
+<p>Эквити всегда считается по <em>текущему состоянию</em> каждого диапазона (то есть с учётом всех применённых фильтров).</p>
+</div>
+</section>
+<section id="s6">
+<h2>6) Load filters (auto filters)</h2>
+<p>
+            Когда есть хотя бы 1 диапазон и задан борд, генерируются авто-группы фильтров
+            (категории рук типа сеты, две пары, флеши, стриты и т.д.). Это база для быстрой фильтрации диапазона.
+          </p>
+<div class="two-col">
+<div class="callout">
+<strong>PLO4 behavior</strong>
+<ul>
+<li>Авто-фильтры подгружаются автоматически при изменении борда.</li>
+<li>Если что-то не обновилось — жми <code>Reload filters</code>.</li>
+</ul>
+</div>
+<div class="callout">
+<strong>PLO5 behavior</strong>
+<p class="muted">Потому что диапазоны намного больше, генерация запускается вручную.</p>
+<ul>
+<li>После ввода/изменения борда нажми <code>Load filters</code>, чтобы построить авто-фильтры.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="s7">
+<h2>7) Как читать панель фильтров</h2>
+<p>Когда фильтры загружены, ты увидишь группы (категории). Кликни по группе — она раскроется и покажет фильтры внутри.</p>
+<p>У каждого фильтра есть процент — сколько части текущего диапазона “попадает” под этот фильтр.</p>
+<p>Можно выбирать:</p>
+<ul>
+<li>Целую группу (выбираются все фильтры внутри)</li>
+<li>Или точечно отдельные фильтры внутри группы</li>
+</ul>
+</section>
+<section id="s8">
+<h2>8) Apply filters (и что значит “Selected %”)</h2>
+<p><strong>Apply filters</strong></p>
+<ol>
+<li>Выбери один или несколько фильтров (или группы)</li>
+<li>Нажми <code>Apply filters</code></li>
+</ol>
+<p>Результат:</p>
+<ul>
+<li>Диапазон режется и остаются только те руки, которые подходят под твой выбор</li>
+<li>Появится <code>Selected: X%</code> — сколько от исходного “текущего” диапазона осталось</li>
+</ul>
+<p class="muted">С этого момента эквити, дальнейшие фильтры и переход по улицам идут уже от отфильтрованного диапазона как от нового базового.</p>
+<div class="callout">
+<strong>Remove filters</strong>
+<p>Рядом с Apply есть <code>Remove filters</code> — это обратная логика: выкинуть совпадающие руки:</p>
+<p class="muted">Руки, которые проходят выбранные фильтры, удаляются из диапазона, и все проценты пересчитываются.</p>
+</div>
+<div class="callout note">
+<strong>Область действия Apply / Remove</strong>
+<p>Основные <code>Apply filters</code> и <code>Remove filters</code> работают глобально: обновляют все диапазоны сразу.</p>
+<p>У каждого игрока есть свои Apply / Remove — они меняют только один конкретный диапазон и не трогают остальных.</p>
+</div>
+</section>
+<section id="s9">
+<h2>9) Clear filters и логика по улицам</h2>
+<div class="two-col">
+<div class="callout">
+<strong>Clear filters (global)</strong>
+<p>Clear filters сбрасывает фильтрацию для всех диапазонов (возврат к “до фильтров” на текущей улице).</p>
+</div>
+<div class="callout">
+<strong>Clear (per player)</strong>
+<p>У каждого игрока есть своя кнопка <code>Clear</code> — сбросит фильтры только для этого игрока.</p>
+</div>
+</div>
+<div class="callout note">
+<strong>Правило отката street-by-street</strong>
+<p>Фильтрация трекается по улицам:</p>
+<ul>
+<li>Если ты отфильтровал на флопе, потом добавил тёрн и снова фильтровал — <code>Clear</code> / <code>Clear filters</code> снимет только тёрновую фильтрацию.</li>
+<li>Чтобы откатить более раннюю улицу (например, флоп-фильтрацию): сначала убери текущую карту улицы (например, удали тёрн-карту), и затем жми <code>Clear</code> / <code>Clear filters</code>.</li>
+</ul>
+</div>
+</section>
+<section id="s10">
+<h2>10) Кастомные фильтры (+Filter)</h2>
+<p>Можно собирать свои фильтры поверх авто-групп — под конкретный спот.</p>
+<p>Нажми <code>+Filter</code> и введи фильтр, используя:</p>
+<ul>
+<li>Ранги: <code>2–A</code></li>
+<li>Масти: <code>s</code>, <code>c</code>, <code>d</code>, <code>h</code></li>
+</ul>
+<div class="callout">
+<strong>Частые паттерны</strong>
+<ul>
+<li><strong>Один ранг</strong>: <code>A</code> → руки, где есть туз</li>
+<li><strong>Конкретная карта</strong>: <code>As</code> → руки, где есть туз пик</li>
+<li><strong>Несколько рангов</strong>: <code>AK7</code> → руки, где одновременно есть A, K и 7</li>
+<li><strong>Карманные пары</strong>: <code>pp</code> - любая карманная пара (AA, KK, QQ и т.д.)</li>
+<li><strong>Смешанные ранги + требование по масти</strong>: <code>AKc7</code> → руки, где есть A и 7 (любой масти) и при этом K♣</li>
+</ul>
+</div>
+<div class="callout">
+<strong>Счётчики мастей</strong>
+<ul>
+<li><code>d</code> → минимум 1 бубна</li>
+<li><code>dd</code> → минимум 2 бубны</li>
+<li><code>ddd</code> → минимум 3 бубны (и так далее)</li>
+</ul>
+</div>
+<div class="callout note">
+<strong>Исключения через “!”</strong>
+<p>Добавь <code>!</code>, чтобы исключить всё, что идёт после него:</p>
+<p class="muted">Пример: <code>X!Y</code> оставляет руки, которые имеют X, но выкидывает те, которые одновременно имеют Y</p>
+</div>
+</section>
+<section id="s11">
+<h2>11) Комбинация нескольких фильтров</h2>
+<p>Можно вводить несколько токенов через запятые или пробелы:</p>
+<div class="two-col">
+<div class="callout">
+<strong>Запятые = OR</strong>
+<pre><code>AA, cc, AsK</code></pre>
+<p class="muted">Выбирает руки, где есть хотя бы одно из: AA или cc или AsK</p>
+</div>
+<div class="callout">
+<strong>Пробелы / переносы строки = AND</strong>
+<pre><code>AA cc Ks</code></pre>
+<p class="muted">Выбирает руки, где всё вместе: AA AND cc AND Ks</p>
+</div>
+</div>
+</section>
+<section id="s12">
+<h2>12) Редактирование фильтров и групп (weight(вес), +With, +Without)</h2>
+<p>Можно подкрутить отдельный фильтр или целую группу.</p>
+<div class="callout">
+<strong>Настройка weight(вес)</strong>
+<p class="muted">Если уменьшить weight(вес), то вес совпадающих комбинаций будет снижен на заданный процент (Пример: задаем вес 50% - было AsAcKsKc@88, стало AsAcKsKc@44).</p>
+</div>
+<div class="callout note">
+<strong>+With (добавить обязательные условия)</strong>
+<p>Добавляет дополнительные условия, которые тоже должны выполняться.</p>
+<p class="muted">Пример:</p>
+<ol>
+<li>Открой группу <code>Sets</code></li>
+<li>Нажми <code>+With</code></li>
+<li>Выбери существующий фильтр/группу (например, <code>FD</code>)</li>
+<li>Сохрани</li>
+</ol>
+<p class="muted">Теперь “Sets” станет “Sets with FD”: любая рука, проходящая Sets, должна ещё и удовлетворять FD.</p>
+<div class="callout" style="margin-top:10px;">
+<strong>Переключатель All / Any</strong>
+<ul>
+<li><strong><code>All</code></strong>: должны выполняться все выбранные условия в <code>+With</code></li>
+<li><strong><code>Any</code></strong>: достаточно, чтобы выполнилось хотя бы одно условие</li>
+</ul>
+</div>
+</div>
+<div class="callout note">
+<strong>+Without (исключить условия)</strong>
+<p>Работает как <code>+With</code>, но наоборот: выкидывает руки, которые матчятся по выбранным условиям.</p>
+</div>
+<div class="callout">
+<strong>кастомные условия внутри +With / +Without</strong>
+<p class="muted">Не обязательно выбирать только готовые группы — можно ввести условие тем же синтаксисом, что и для кастомных фильтров.</p>
+</div>
+</section>
+<section id="s13">
+<h2>13) Типовой сценарий</h2>
+<ol>
+<li>Выбери PLO4 или PLO5</li>
+<li>Введи диапазоны на 2–6 игроков (preset / saved / % / manual)</li>
+<li>(Опционально) Сохрани диапазоны, которые будешь часто юзать</li>
+<li>Задай борд + мертвые карты</li>
+<li>Загрузи фильтры (авто в PLO4, кнопкой в PLO5)</li>
+<li>Выбери релевантные группы (например, сеты, врапы, флеш-дро)</li>
+<li>Примени (или убери) фильтры</li>
+<li>Посчитай эквити</li>
+<li>Добавь следующую карту улицы и повторяй фильтрацию по необходимости</li>
+</ol>
+</section>
+<section id="s14">
+<h2>14) Copy / экспорт диапазона</h2>
+<p>В любой момент жми иконку копирования, чтобы скопировать текущий диапазон (со всей применённой фильтрацией) в буфер обмена.</p>
+</section>
+<p class="muted" style="margin: 16px 10px 2px; font-size: 12px;">
+          Совет: юзай поиск по странице (Ctrl+F), чтобы быстро находить штуки типа “Reload filters”, “Selected” или “+With”.
+        </p>
+</main>
+</div>
+</div>
+  </template>
+
+  <script>
+  (function() {
+    const mount = document.getElementById('mount');
+    const tplEn = document.getElementById('tpl-en');
+    const tplRu = document.getElementById('tpl-ru');
+
+    function setLang(lang, opts) {
+      opts = opts || {};
+      const keepScroll = opts.keepScroll !== false;
+      const y = keepScroll ? window.scrollY : 0;
+      const hash = window.location.hash;
+
+      document.documentElement.lang = lang;
+
+      // swap DOM (keeps design EXACT, because we swap your original markup)
+      mount.innerHTML = (lang === 'ru' ? tplRu.innerHTML : tplEn.innerHTML);
+
+      // title
+      document.title = (lang === 'ru')
+        ? 'PLO Range Lab — Гайд пользователя'
+        : 'PLO Range Lab — User Guide';
+
+      // update switcher pressed state
+      mount.querySelectorAll('[data-lang]').forEach(btn => {
+        const active = btn.getAttribute('data-lang') === lang;
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+
+      // bind switcher
+      mount.querySelectorAll('[data-lang]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const next = btn.getAttribute('data-lang');
+          localStorage.setItem('guide_lang', next);
+          setLang(next);
+        });
+      });
+
+      // restore scroll / hash
+      if (hash) {
+        const el = mount.querySelector(hash);
+        if (el) el.scrollIntoView();
+      } else if (keepScroll) {
+        window.scrollTo(0, y);
+      }
+    }
+
+    const saved = localStorage.getItem('guide_lang');
+    const initial = (saved === 'ru' || saved === 'en') ? saved : 'en';
+    setLang(initial, { keepScroll: false });
+  })();
+  </script>
 </body>
 </html>
