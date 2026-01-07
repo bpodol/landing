@@ -538,7 +538,7 @@
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ email, password })
             });
-            setStatus((data && data.message) || "Check your email to confirm your account.", "success");
+            setStatus((data && data.message) || "Check your email (and spam folder) to confirm your account.", "success");
             toggleResend(true);
             return;
           }
