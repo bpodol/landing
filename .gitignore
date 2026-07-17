@@ -1,4 +1,5 @@
 
 downloads/
 *.exe
+.license-private-key.b64
 
