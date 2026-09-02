@@ -4,731 +4,110 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PLO RangeLab</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 48px 20px;
+      color: #e5e7eb;
+      background: linear-gradient(180deg, #050816 0%, #0a1021 100%);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main {
+      width: min(900px, 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+      text-align: center;
+    }
+    .logo {
+      width: auto;
+      height: 76px;
+      filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.35));
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 6vw, 52px);
+      letter-spacing: -0.03em;
+    }
+    .photo {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 16px;
+      box-shadow: 0 18px 70px rgba(0, 0, 0, 0.45);
+    }
+    .download {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 20px;
+      border-radius: 12px;
+      color: #fff;
+      background: linear-gradient(135deg, #4f46e5, #6d28d9);
+      box-shadow: 0 16px 50px rgba(79, 70, 229, 0.25);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .support-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 999px;
+      color: #e5e7eb;
+      background: rgba(79, 70, 229, 0.12);
+      font-weight: 600;
+      text-decoration: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease, transform 120ms ease;
+    }
+    .support-link:hover {
+      border-color: rgba(79, 70, 229, 0.55);
+      background: rgba(79, 70, 229, 0.18);
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.28);
+      text-decoration: none;
+    }
+    .support-icon {
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(79, 70, 229, 0.32);
+      border-radius: 50%;
+      background: rgba(79, 70, 229, 0.14);
+    }
+    .support-icon svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+    .support-label {
+      font-size: 13px;
+    }
+    .download:hover { text-decoration: underline; }
+  </style>
 </head>
-<body data-api-base="https://auth-api-0krz.onrender.com">
-  <header class="hero">
-    <div class="container hero-content">
-      <div class="hero-inner">
-        <p class="eyebrow">PLO4 &amp; PLO5 RANGE ANALYSIS</p>
-        <img class="brand-mark" src="logo.png" alt="PLO RangeLab logo">
-        <div class="product-name">PLO RangeLab</div>
-        <h1>PLO Range &amp; Equity Analysis</h1>
-        <p class="lede">Analyze PLO4 and PLO5 ranges street by street. Compute equity, see how ranges hit the board, filter them, and carry them forward.</p>
-        <div class="cta-row">
-          <a class="btn primary" href="#" id="signup">Create account</a>
-          <a class="btn ghost" href="https://github.com/bpodol/landing/releases/download/v0.1.0/PLO.RangeLab_0.1.0_x64-setup.exe" id="download">Download desktop app</a>
-        </div>
-        <p class="micro">Desktop app • No cloud solvers • Built specifically for PLO</p>
-        <p class="micro" id="auth-cta">Already have an account? <a href="#" id="login">Log in</a></p>
-        <div class="auth-user hidden" id="auth-user">
-          <span class="micro">Signed in as <strong id="user-email"></strong></span>
-          <button class="btn ghost" id="logout-btn">Log out</button>
-        </div>
-        <p class="status micro" id="cta-status"></p>
-
-        <div class="card highlight hero-demo">
-          <h3>What you can do</h3>
-          <ul>
-            <li>Input ranges manually, choose from presets, or % notation</li>
-            <li>Compute equity between multiple players</li>
-            <li>Filter ranges and advance them across streets</li>
-          </ul>
-          <div class="guide-link">
-            <a class="pill-link" href="guide.html" target="_blank" rel="noopener">Read the user guide</a>
-          </div>
-          <img src="Screenshot.png" alt="PLO RangeLab range filtering interface screenshot" width="700">
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <main class="container">
-    <section class="grid features">
-      <div class="card">
-        <h3>Flexible range input</h3>
-        <p>Paste ranges manually, choose presets, or enter percentage ranges like 60%–5%. Save your own custom ranges for later use.</p>
-      </div>
-      <div class="card">
-        <h3>Equity &amp; board interaction</h3>
-        <p>See how ranges hit the board. Track equity changes from flop to river.</p>
-      </div>
-      <div class="card">
-        <h3>Filter, save, export</h3>
-        <p>Filter and weight ranges, take them to the next street, and export them by copying at any point.</p>
-      </div>
-    </section>
-
-    <section class="pricing card" id="pricing-section">
-      <div>
-        <p class="eyebrow">SIMPLE, TRANSPARENT PRICING</p>
-        <h2>Pro</h2>
-        <p class="price">15$ / month</p>
-        <p class="lede">Paid yearly</p>
-        <a class="btn primary" href="#" id="choose-plan">Unlock Pro access</a>
-        <p class="micro" style="margin-top:6px;">Instant access after payment</p>
-      </div>
-      <ul>
-        <li>- Full PLO4 &amp; PLO5 support</li>
-        <li>- Advanced board-aware range filters</li>
-        <li>- Saved ranges &amp; reusable presets</li>
-        <li>- Continuous updates &amp; improvements</li>
-      </ul>
-    </section>
-
-    <section class="pricing card hidden" id="subscription-section">
-      <div>
-        <p class="eyebrow">Your subscription</p>
-        <h2 id="sub-plan">Pro</h2>
-        <p class="price" id="sub-status">Subscription active</p>
-        <p class="lede" id="sub-expiry">Renews soon</p>
-        <a class="btn primary hidden" href="#" id="upgrade-plan">Switch to annual and save</a>
-      </div>
-      <ul>
-        <li>- PLO4 and PLO5 support</li>
-        <li>- Board-aware filters</li>
-        <li>- Saved ranges & presets</li>
-        <li>- Priority updates</li>
-      </ul>
-    </section>
-
-    <section class="steps">
-      <h3>Get started in minutes</h3>
-      <div class="grid">
-        <div class="card">
-          <p class="eyebrow">Step 1</p>
-          <p>Create your account and choose a plan.</p>
-        </div>
-        <div class="card">
-          <p class="eyebrow">Step 2</p>
-          <p>Download the desktop app for your system.</p>
-        </div>
-        <div class="card">
-          <p class="eyebrow">Step 3</p>
-          <p>Log in and start analyzing PLO ranges instantly.</p>
-        </div>
-      </div>
-    </section>
+<body>
+  <main>
+    <img class="logo" src="logo.png" alt="PLO RangeLab logo">
+    <h1>PLO RangeLab</h1>
+    <img class="photo" src="Screenshot.png" alt="PLO RangeLab range filtering interface screenshot">
+    <a class="download" href="https://github.com/bpodol/landing/releases/download/v0.1.0/PLO.RangeLab_0.1.0_x64-setup.exe">Download desktop app</a>
+    <a href="https://t.me/RangeLabTeam" class="support-link" target="_blank" rel="noopener" aria-label="Telegram support chat">
+      <span class="support-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" role="presentation">
+          <path d="M21.78 4.21a1.38 1.38 0 0 0-1.41-.17l-16.8 7.2a1.36 1.36 0 0 0-.82 1.18c-.02.58.4 1.1.99 1.2l4.25.86 1.25 4.14a1.37 1.37 0 0 0 1.1.97h.2c.32 0 .64-.12.9-.32l2.55-2.04 3.7 2.76c.24.18.52.27.81.27.18 0 .36-.03.53-.1.42-.15.73-.51.82-.95l3-13.92c.09-.4-.05-.83-.37-1.08ZM9.22 12.55l8.25-5.07-5.63 6.34-2.62-.53Zm2.78 5.95-1.02-3.34 5.71-6.42-4.15 8.87-.54.89Z"/>
+        </svg>
+      </span>
+      <span class="support-label">Support chat</span>
+    </a>
   </main>
-
-  <footer class="footer">
-    <div class="footer-social">
-      <div class="footer-links">
-        <a href="mailto:plorangelab@gmail.com" class="footer-email">plorangelab@gmail.com</a>
-        <span class="footer-terms">
-          Terms &amp; Refunds
-          <span class="terms-popup">
-            Digital product. Access is granted immediately after payment.<br>
-            Refunds available within 24 hours if access is not delivered.
-          </span>
-        </span>
-      </div>
-      <div class="footer-support">
-        <a href="https://t.me/RangeLabTeam" class="support-link" target="_blank" rel="noopener" aria-label="Telegram support chat">
-          <span class="support-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" role="presentation">
-              <path d="M21.78 4.21a1.38 1.38 0 0 0-1.41-.17l-16.8 7.2a1.36 1.36 0 0 0-.82 1.18c-.02.58.4 1.1.99 1.2l4.25.86 1.25 4.14a1.37 1.37 0 0 0 1.1.97h.2c.32 0 .64-.12.9-.32l2.55-2.04 3.7 2.76c.24.18.52.27.81.27.18 0 .36-.03.53-.1.42-.15.73-.51.82-.95l3-13.92c.09-.4-.05-.83-.37-1.08ZM9.22 12.55l8.25-5.07-5.63 6.34-2.62-.53Zm2.78 5.95-1.02-3.34 5.71-6.42-4.15 8.87-.54.89Z"/>
-            </svg>
-          </span>
-          <span class="support-label">Support chat</span>
-        </a>
-      </div>
-      <div class="micro footer-copy">PLO RangeLab</div>
-      <div class="micro footer-crypto">Crypto payments supported (USDT · TRC20)</div>
-    </div>
-  </footer>
-
-  <div class="modal-backdrop" id="auth-modal" aria-hidden="true">
-    <div class="modal">
-      <div class="modal-header">
-        <h3 id="auth-title">Create your account</h3>
-        <button class="icon-btn" id="auth-close" aria-label="Close auth modal">X</button>
-      </div>
-      <form id="auth-form">
-        <label class="field">
-          <span>Email</span>
-          <input type="email" id="auth-email" required placeholder="you@example.com">
-        </label>
-        <label class="field">
-          <span>Password</span>
-          <input type="password" id="auth-password" required placeholder="At least 8 characters">
-          <span class="micro">Min 8 characters, include a letter and a number.</span>
-        </label>
-        <label class="field">
-          <span>Confirm password</span>
-          <input type="password" id="auth-password-confirm" required placeholder="Re-enter your password">
-        </label>
-        <p class="status" id="auth-status"></p>
-        <button class="btn ghost full hidden" type="button" id="resend-confirmation">Resend confirmation email</button>
-        <button class="btn ghost full hidden" type="button" id="forgot-password">Forgot password?</button>
-        <button class="btn primary full" type="submit" id="auth-submit">Create account</button>
-        <p class="micro auth-switch">
-          <a href="#" id="switch-to-login">Log in instead</a>
-        </p>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="plan-modal" aria-hidden="true">
-    <div class="modal">
-      <div class="modal-header">
-        <h3>Select a plan</h3>
-        <button class="icon-btn" id="plan-close" aria-label="Close plan modal">X</button>
-      </div>
-      <div class="modal-body">
-        <div class="plan-options">
-          <div class="plan-pill selected" data-plan="annual" id="plan-annual">
-            Annual plan • 180$ / Year (15$ / month)
-          </div>
-        </div>
-        <p class="micro" id="plan-selected">One-time payment of 180$ in USDT (TRC20) for 1 year of access (15$ / month).</p>
-        <p class="status" id="payment-status"></p>
-        <div class="hidden" id="payment-details">
-          <p class="micro">Send <span id="pay-amount"></span> USDT (TRC20) to:</p>
-          <code id="pay-address"></code>
-        </div>
-        <button class="btn primary full" id="pay-btn" type="button">Proceed to payment</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Keep your existing script exactly as-is -->
-  <script>
-    (function () {
-      const apiBase = window.AUTH_API_BASE || document.body.dataset.apiBase || "http://localhost:3000";
-      const TOKEN_KEY = "auth_token";
-      const modal = document.getElementById("auth-modal");
-      const form = document.getElementById("auth-form");
-      const emailInput = document.getElementById("auth-email");
-      const passwordInput = document.getElementById("auth-password");
-      const passwordConfirmInput = document.getElementById("auth-password-confirm");
-      const passwordConfirmField = passwordConfirmInput ? passwordConfirmInput.closest(".field") : null;
-      const emailField = emailInput ? emailInput.closest(".field") : null;
-      const passwordField = passwordInput ? passwordInput.closest(".field") : null;
-      const submitBtn = document.getElementById("auth-submit");
-      const resendBtn = document.getElementById("resend-confirmation");
-      const forgotBtn = document.getElementById("forgot-password");
-      const titleEl = document.getElementById("auth-title");
-      const switchLink = document.getElementById("switch-to-login");
-      const statusEl = document.getElementById("auth-status");
-      const closeBtn = document.getElementById("auth-close");
-      const signupBtn = document.getElementById("signup");
-      const loginBtn = document.getElementById("login");
-      const planBtn = document.getElementById("choose-plan");
-      const authCta = document.getElementById("auth-cta");
-      const userRow = document.getElementById("auth-user");
-      const userEmail = document.getElementById("user-email");
-      const logoutBtn = document.getElementById("logout-btn");
-      const ctaStatus = document.getElementById("cta-status");
-      const planModal = document.getElementById("plan-modal");
-      const planClose = document.getElementById("plan-close");
-      const planAnnual = document.getElementById("plan-annual");
-      const planButtons = [planAnnual].filter(Boolean);
-      const planSelected = document.getElementById("plan-selected");
-      const payBtn = document.getElementById("pay-btn");
-      const paymentStatus = document.getElementById("payment-status");
-      const paymentDetails = document.getElementById("payment-details");
-      const payAmountEl = document.getElementById("pay-amount");
-      const payAddressEl = document.getElementById("pay-address");
-
-      let mode = "signup";
-      let working = false;
-      let selectedPlan = "annual";
-      let paymentPoll = null;
-      let activeOrderId = null;
-      let resetTokenValue = null;
-
-      function takeResetTokenFromUrl() {
-        const params = new URLSearchParams(window.location.search);
-        const urlToken = params.get("resetToken");
-        if (!urlToken) return null;
-        params.delete("resetToken");
-        const newQuery = params.toString();
-        const newUrl = newQuery ? `${window.location.pathname}?${newQuery}` : window.location.pathname;
-        window.history.replaceState({}, document.title, newUrl);
-        return urlToken;
-      }
-
-      function storeTokenFromUrl() {
-        const params = new URLSearchParams(window.location.search);
-        const urlToken = params.get("token");
-        if (!urlToken) return null;
-        localStorage.setItem(TOKEN_KEY, urlToken);
-        params.delete("token");
-        const newQuery = params.toString();
-        const newUrl = newQuery ? `${window.location.pathname}?${newQuery}` : window.location.pathname;
-        window.history.replaceState({}, document.title, newUrl);
-        return urlToken;
-      }
-
-      function passwordValid(pw) {
-        return pw && pw.length >= 8 && /[A-Za-z]/.test(pw) && /[0-9]/.test(pw);
-      }
-
-      function setStatus(message, kind) {
-        statusEl.textContent = message || "";
-        statusEl.dataset.kind = kind || "";
-        statusEl.classList.toggle("show", !!message);
-      }
-      function toggleResend(show) {
-        if (!resendBtn) return;
-        resendBtn.classList.toggle("hidden", !show);
-      }
-      function toggleForgot(show) {
-        if (!forgotBtn) return;
-        forgotBtn.classList.toggle("hidden", !show);
-      }
-
-      function setCtaStatus(message, kind) {
-        ctaStatus.textContent = message || "";
-        ctaStatus.dataset.kind = kind || "";
-        ctaStatus.classList.toggle("show", !!message);
-      }
-
-      function setPaymentStatus(message, kind) {
-        if (!paymentStatus) return;
-        paymentStatus.textContent = message || "";
-        paymentStatus.dataset.kind = kind || "";
-        paymentStatus.classList.toggle("show", !!message);
-      }
-
-      function resetPaymentState() {
-        activeOrderId = null;
-        if (paymentPoll) {
-          clearInterval(paymentPoll);
-          paymentPoll = null;
-        }
-        if (paymentDetails) paymentDetails.classList.add("hidden");
-        if (payAmountEl) payAmountEl.textContent = "";
-        if (payAddressEl) payAddressEl.textContent = "";
-        setPaymentStatus("", "");
-      }
-
-      function setMode(next) {
-        mode = ["login", "forgot", "reset"].includes(next) ? next : "signup";
-        const isSignup = mode === "signup";
-        const isLogin = mode === "login";
-        const isForgot = mode === "forgot";
-        const isReset = mode === "reset";
-
-        titleEl.textContent = isSignup
-          ? "Create your account"
-          : isLogin
-            ? "Log in to your account"
-            : isForgot
-              ? "Reset your password"
-              : "Set a new password";
-        submitBtn.textContent = isSignup
-          ? "Create account"
-          : isLogin
-            ? "Log in"
-            : isForgot
-              ? "Send reset link"
-              : "Save new password";
-        if (isLogin) {
-          switchLink.textContent = "Create an account instead";
-          switchLink.dataset.target = "signup";
-        } else if (isSignup) {
-          switchLink.textContent = "Log in instead";
-          switchLink.dataset.target = "login";
-        } else {
-          switchLink.textContent = "Back to login";
-          switchLink.dataset.target = "login";
-        }
-
-        if (emailField) emailField.classList.toggle("hidden", isReset);
-        if (emailInput) {
-          emailInput.required = !isReset;
-          if (isReset) emailInput.value = "";
-        }
-        if (passwordField) passwordField.classList.toggle("hidden", isForgot);
-        if (passwordInput) {
-          passwordInput.required = !isForgot;
-          if (isForgot) passwordInput.value = "";
-        }
-        if (passwordConfirmField) {
-          const showConfirm = isSignup || isReset;
-          passwordConfirmField.classList.toggle("hidden", !showConfirm);
-          if (passwordConfirmInput) {
-            passwordConfirmInput.required = showConfirm;
-            if (!showConfirm) passwordConfirmInput.value = "";
-          }
-        }
-        toggleResend(false);
-        toggleForgot(false);
-      }
-
-      function openModal(nextMode) {
-        setMode(nextMode);
-        setStatus("", "");
-        toggleResend(false);
-        modal.classList.add("open");
-        modal.setAttribute("aria-hidden", "false");
-        setTimeout(() => emailInput.focus(), 50);
-      }
-
-      function closeModal() {
-        modal.classList.remove("open");
-        modal.setAttribute("aria-hidden", "true");
-      }
-
-      function openPlanModal() {
-        selectedPlan = "annual";
-        resetPaymentState();
-        planButtons.forEach((b) => b.classList.toggle("selected", b.dataset.plan === selectedPlan));
-        if (planSelected) planSelected.textContent = "One-time payment of 180$ in USDT (TRC20) for 1 year of access (15$ / month).";
-        if (payBtn) payBtn.classList.remove("hidden");
-        planModal.classList.add("open");
-        planModal.setAttribute("aria-hidden", "false");
-      }
-
-      function closePlanModal() {
-        resetPaymentState();
-        planModal.classList.remove("open");
-        planModal.setAttribute("aria-hidden", "true");
-      }
-
-      function toggleSignedIn(email) {
-        if (email) {
-          userEmail.textContent = email;
-          userRow.classList.remove("hidden");
-          authCta.classList.add("hidden");
-          if (signupBtn) signupBtn.classList.add("hidden");
-          setCtaStatus("You are signed in. Open the app to start using PLO RangeLab.", "success");
-        } else {
-          userRow.classList.add("hidden");
-          authCta.classList.remove("hidden");
-          if (signupBtn) signupBtn.classList.remove("hidden");
-          setCtaStatus("", "");
-        }
-      }
-
-      function updateSubscriptionUI(subscription) {
-        const pricing = document.getElementById("pricing-section");
-        const subSection = document.getElementById("subscription-section");
-        const subPlan = document.getElementById("sub-plan");
-        const subStatus = document.getElementById("sub-status");
-        const subExpiry = document.getElementById("sub-expiry");
-        const upgradeBtn = document.getElementById("upgrade-plan");
-
-        const paid =
-          subscription &&
-          (subscription.effective_status === "paid" ||
-            subscription.paid_status === "active" ||
-            subscription.status === "active" ||
-            subscription.access);
-        const isActive = Boolean(subscription && subscription.plan && paid);
-        if (pricing) pricing.classList.toggle("hidden", !!isActive);
-        if (subSection) subSection.classList.toggle("hidden", !isActive);
-        if (!isActive) return;
-
-        // Single plan: always show Pro subscription label
-        if (subPlan) subPlan.textContent = "Pro";
-        if (subStatus) subStatus.textContent = "Subscription active";
-        if (subExpiry && subscription.expires_at) {
-          const exp = new Date(subscription.expires_at).toLocaleDateString();
-          subExpiry.textContent = `Renews on ${exp}`;
-        }
-
-        if (upgradeBtn) {
-          const showUpgrade = subscription.plan === "monthly";
-          upgradeBtn.classList.toggle("hidden", !showUpgrade);
-          upgradeBtn.onclick = (e) => {
-            e.preventDefault();
-            selectedPlan = "annual";
-            planButtons.forEach((b) => b && b.classList.remove("selected"));
-            if (planAnnual) planAnnual.classList.add("selected");
-            if (planSelected) planSelected.textContent = "One-time payment of 180$ in USDT (TRC20) for 1 year of access (15$ / month).";
-            if (payBtn) payBtn.classList.remove("hidden");
-            openPlanModal();
-          };
-        }
-      }
-
-      async function api(path, options = {}) {
-        const res = await fetch(apiBase + path, options);
-        const text = await res.text();
-        let data = null;
-        try { data = text ? JSON.parse(text) : null; } catch { data = null; }
-        if (!res.ok) {
-          const msg = (data && (data.error || data.message)) || "Request failed";
-          throw new Error(msg);
-        }
-        return data;
-      }
-
-      async function pollOrderStatus(orderId, token) {
-        const data = await api(`/api/billing/order-status?orderId=${encodeURIComponent(orderId)}`, {
-          headers: { Authorization: "Bearer " + token }
-        });
-        return data?.status;
-      }
-
-      async function refreshSubscription(token) {
-        try {
-          const me = await api("/me", { headers: { Authorization: "Bearer " + token } });
-          if (me && me.subscription) updateSubscriptionUI(me.subscription);
-        } catch {}
-      }
-
-      function startPaymentPolling(orderId, token) {
-        if (paymentPoll) clearInterval(paymentPoll);
-        activeOrderId = orderId;
-        paymentPoll = setInterval(async () => {
-          try {
-            const status = await pollOrderStatus(orderId, token);
-            if (!status) return;
-            if (status === "paid") {
-              setPaymentStatus("Paid ✅ Subscription will update shortly.", "success");
-              clearInterval(paymentPoll);
-              paymentPoll = null;
-              await refreshSubscription(token);
-            } else if (status === "failed" || status === "expired") {
-              setPaymentStatus("Payment failed or expired. Please try again.", "error");
-              clearInterval(paymentPoll);
-              paymentPoll = null;
-            } else {
-              setPaymentStatus("Waiting for payment confirmation…", "info");
-            }
-          } catch {}
-        }, 4000);
-      }
-
-      async function loadSession(token) {
-        if (!token) return;
-        try {
-          const data = await api("/me", { headers: { Authorization: "Bearer " + token } });
-          if (data && data.user && data.user.email) {
-            localStorage.setItem(TOKEN_KEY, token);
-            toggleSignedIn(data.user.email);
-          }
-        } catch {
-          localStorage.removeItem(TOKEN_KEY);
-          toggleSignedIn(null);
-        }
-      }
-
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        if (working) return;
-        const email = emailInput.value.trim();
-        const password = passwordInput.value.trim();
-        const confirm = passwordConfirmInput.value.trim();
-        if (mode !== "reset" && !email) { setStatus("Enter your email.", "error"); return; }
-        if ((mode === "signup" || mode === "login") && !password) { setStatus("Enter your password.", "error"); return; }
-        if ((mode === "signup" || mode === "reset") && !passwordValid(password)) { setStatus("Password must be 8+ chars and include a letter and number.", "error"); return; }
-        if ((mode === "signup" || mode === "reset") && password !== confirm) { setStatus("Passwords do not match.", "error"); return; }
-        if (mode === "reset" && !resetTokenValue) { setStatus("Reset link is invalid or expired. Request a new one.", "error"); return; }
-
-        working = true;
-        submitBtn.disabled = true;
-        submitBtn.textContent =
-          mode === "signup" ? "Creating..." :
-          mode === "login" ? "Signing in..." :
-          mode === "forgot" ? "Sending..." : "Saving...";
-        setStatus("", "");
-        setCtaStatus("", "");
-        toggleResend(false);
-        toggleForgot(false);
-
-        try {
-          if (mode === "signup") {
-            const data = await api("/auth/register", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email, password })
-            });
-            setStatus((data && data.message) || "Check your email (and spam folder) to confirm your account.", "success");
-            toggleResend(true);
-            return;
-          }
-
-          if (mode === "forgot") {
-            const data = await api("/auth/forgot-password", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email })
-            });
-            setStatus((data && data.message) || "If an account exists, you will receive a reset email shortly.", "success");
-            return;
-          }
-
-          if (mode === "reset") {
-            const data = await api("/auth/reset-password", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ token: resetTokenValue, password })
-            });
-            const token = data && data.token;
-            const emailFromApi = data && data.user && data.user.email ? data.user.email : "";
-            if (token) {
-              localStorage.setItem(TOKEN_KEY, token);
-              toggleSignedIn(emailFromApi);
-              try {
-                const me = await api("/me", { headers: { Authorization: "Bearer " + token } });
-                if (me && me.subscription) updateSubscriptionUI(me.subscription);
-              } catch {}
-            }
-            setStatus("Password updated. You are now signed in.", "success");
-            resetTokenValue = null;
-            closeModal();
-            return;
-          }
-
-          const data = await api("/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
-          });
-          const token = data && data.token;
-          const emailFromApi = data && data.user && data.user.email ? data.user.email : email;
-          if (token) {
-            localStorage.setItem(TOKEN_KEY, token);
-            try {
-              const me = await api("/me", { headers: { Authorization: "Bearer " + token } });
-              if (me && me.subscription) updateSubscriptionUI(me.subscription);
-            } catch {}
-          }
-          setStatus("You are signed in. Open the app to start using PLO RangeLab.", "success");
-          toggleSignedIn(emailFromApi);
-          if (data && data.subscription) updateSubscriptionUI(data.subscription);
-          closeModal();
-        } catch (err) {
-          const msg = err instanceof Error ? err.message : "Unable to sign in right now.";
-          setStatus(msg, "error");
-          if (mode === "login") {
-            if (msg.toLowerCase().includes("confirm your email")) toggleResend(true);
-            if (msg.toLowerCase().includes("invalid credentials")) toggleForgot(true);
-          }
-        } finally {
-          working = false;
-          submitBtn.disabled = false;
-          submitBtn.textContent =
-            mode === "signup" ? "Create account" :
-            mode === "login" ? "Log in" :
-            mode === "forgot" ? "Send reset link" : "Save new password";
-        }
-      });
-
-      switchLink.addEventListener("click", (e) => {
-        e.preventDefault();
-        const target = switchLink.dataset.target === "login" ? "login" : "signup";
-        setMode(target);
-      });
-
-      if (resendBtn) {
-        resendBtn.addEventListener("click", async (e) => {
-          e.preventDefault();
-          if (working) return;
-          const email = emailInput.value.trim();
-          if (!email) { setStatus("Enter your email to resend confirmation.", "error"); return; }
-          working = true;
-          resendBtn.disabled = true;
-          setStatus("Sending confirmation email...", "info");
-          try {
-            const data = await api("/auth/resend-confirmation", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email })
-            });
-            setStatus((data && data.message) || "Confirmation email sent.", "success");
-          } catch (err) {
-            const msg = err instanceof Error ? err.message : "Unable to resend confirmation right now.";
-            setStatus(msg, "error");
-          } finally {
-            working = false;
-            resendBtn.disabled = false;
-          }
-        });
-      }
-
-      if (forgotBtn) {
-        forgotBtn.addEventListener("click", (e) => {
-          e.preventDefault();
-          setMode("forgot");
-          toggleForgot(false);
-          setStatus("", "");
-        });
-      }
-
-      if (signupBtn) signupBtn.addEventListener("click", (e) => { e.preventDefault(); openModal("signup"); });
-      if (planBtn) planBtn.addEventListener("click", (e) => { e.preventDefault(); openPlanModal(); });
-
-      if (payBtn) {
-        payBtn.addEventListener("click", async (e) => {
-          e.preventDefault();
-          if (!selectedPlan) { setCtaStatus("Pick a plan first.", "error"); return; }
-          const token = localStorage.getItem(TOKEN_KEY);
-          if (!token) {
-            setCtaStatus("Please sign in first.", "error");
-            closePlanModal();
-            openModal("login");
-            return;
-          }
-
-          payBtn.disabled = true;
-          payBtn.textContent = "Preparing checkout...";
-          setCtaStatus("", "");
-          setPaymentStatus("", "");
-
-          try {
-            const normalizedPlan = selectedPlan || "annual";
-            const data = await api("/api/billing/create-nowpayments-payment", {
-              method: "POST",
-              headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
-              body: JSON.stringify({ plan: normalizedPlan })
-            });
-
-            if (data.orderId) startPaymentPolling(data.orderId, token);
-
-            if (data.paymentUrl) {
-              setPaymentStatus("Opening payment page in a new tab. Complete the payment to unlock access.", "info");
-              window.open(data.paymentUrl, "_blank");
-            } else if (data.payAddress) {
-              const currencyLabel = (data.payCurrency || "USDT").toUpperCase();
-              if (payAmountEl) payAmountEl.textContent = data.payAmount ? `${data.payAmount} ${currencyLabel}` : currencyLabel;
-              if (payAddressEl) payAddressEl.textContent = data.payAddress;
-              if (paymentDetails) paymentDetails.classList.remove("hidden");
-              setPaymentStatus("Send the exact amount to the address above. We will confirm automatically once paid.", "info");
-            } else {
-              setPaymentStatus("Payment created. Follow the instructions in the payment tab.", "info");
-            }
-          } catch (err) {
-            const msg = err instanceof Error ? err.message : "Unable to set plan.";
-            setPaymentStatus(msg, "error");
-          } finally {
-            payBtn.disabled = false;
-            payBtn.textContent = "Proceed to payment";
-          }
-        });
-      }
-
-      if (loginBtn) loginBtn.addEventListener("click", (e) => { e.preventDefault(); openModal("login"); });
-      if (closeBtn) closeBtn.addEventListener("click", (e) => { e.preventDefault(); closeModal(); });
-      if (planClose) planClose.addEventListener("click", (e) => { e.preventDefault(); closePlanModal(); });
-
-      modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
-      planModal.addEventListener("click", (e) => { if (e.target === planModal) closePlanModal(); });
-
-      window.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeModal(); closePlanModal(); } });
-
-      if (logoutBtn) logoutBtn.addEventListener("click", (e) => { e.preventDefault(); localStorage.removeItem(TOKEN_KEY); toggleSignedIn(null); });
-
-      const resetTokenFromUrl = takeResetTokenFromUrl();
-      if (resetTokenFromUrl) {
-        resetTokenValue = resetTokenFromUrl;
-        openModal("reset");
-        setStatus("Set a new password to continue.", "info");
-      }
-
-      const initialToken = storeTokenFromUrl() || localStorage.getItem(TOKEN_KEY);
-      loadSession(initialToken);
-      if (initialToken) {
-        api("/me", { headers: { Authorization: "Bearer " + initialToken } })
-          .then((data) => { if (data && data.subscription) updateSubscriptionUI(data.subscription); })
-          .catch(() => {});
-      }
-    })();
-  </script>
 </body>
 </html>
