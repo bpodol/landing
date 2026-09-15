@@ -92,6 +92,7 @@
       font-size: 13px;
     }
     .download:hover { text-decoration: underline; }
+    .release-message { max-width: 650px; white-space: pre-line; color: #cbd5e1; font-size: 14px; line-height: 1.5; }
   </style>
 </head>
 <body>
@@ -100,6 +101,7 @@
     <h1>PLO RangeLab</h1>
     <img class="photo" src="Screenshot.png" alt="PLO RangeLab range filtering interface screenshot">
     <a class="download" href="https://github.com/bpodol/landing/releases/download/v0.1.0/PLO.RangeLab_0.1.0_x64-setup.exe">Download desktop app</a>
+    <p class="release-message" id="release-message" hidden></p>
     <a href="https://t.me/RangeLabTeam" class="support-link" target="_blank" rel="noopener" aria-label="Telegram support chat">
       <span class="support-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" role="presentation">
@@ -109,5 +111,23 @@
       <span class="support-label">Support chat</span>
     </a>
   </main>
+  <script>
+    fetch('/updates/announcement.json', { cache: 'no-store' })
+      .then(function (response) { if (!response.ok) throw new Error('Unavailable'); return response.json(); })
+      .then(function (release) {
+        if (typeof release.version !== 'string' || !/^\d+\.\d+\.\d+$/.test(release.version) ||
+            typeof release.download !== 'string' || typeof release.messages !== 'string') return;
+        var url = new URL(release.download);
+        if (url.protocol !== 'https:' || url.username || url.password || url.port ||
+            url.hostname !== 'github.com' || !url.pathname.startsWith('/bpodol/landing/releases/download/')) return;
+        var button = document.querySelector('a.download');
+        button.href = url.href;
+        button.textContent = 'Download desktop app ' + release.version;
+        var message = document.getElementById('release-message');
+        message.textContent = release.messages;
+        message.hidden = !release.messages;
+      })
+      .catch(function () { /* Keep the existing download link when offline. */ });
+  </script>
 </body>
 </html>

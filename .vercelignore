@@ -1,0 +1,15 @@
+.git/
+.github/
+.agents/
+.env
+.env.*
+**/.env
+**/.env.*
+.license-private-key.b64
+**/.license-private-key.b64
+.updater-keys/
+**/*.key
+**/*.pem
+scripts/
+index(old).html
+downloads/
