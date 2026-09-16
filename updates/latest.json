@@ -1,11 +1,11 @@
 {
-  "version": "1.0.0",
-  "notes": "Numeric range engine for PLO4 and PLO5, automatic filter application, and direct numeric equity calculations.\n\nAdds in-app updates for future releases. This first updater-enabled version must be installed manually once.",
-  "pub_date": "2026-09-15T14:59:12.592Z",
+  "version": "1.0.1",
+  "notes": "Replaced the old Remove workflow\u2014where selected hands were simply deleted from the range\u2014with a Split/Move workflow that sends those selected hands into another action branch instead.",
+  "pub_date": "2026-09-16T19:15:49.933Z",
   "platforms": {
     "windows-x86_64": {
-      "url": "https://github.com/bpodol/landing/releases/download/v1.0.0/PLO-RangeLab_1.0.0_x64-setup.exe",
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTmhBZ0gxdHdObnp3YVhnaWhIVzZXZUtDbm0wcjlZZjFpeXhOTVZYRmV3MC9yTUg3UkJob2pTSFVnKzVWUmhJTU9xL1d1RWllV0IweGFveGJ0VWx2bUNxd0xtUkJETndJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg5NDg0MzUyCWZpbGU6UExPIFJhbmdlTGFiXzEuMC4wX3g2NC1zZXR1cC5leGUKTlFJL1A4Q2M4OEpZSGdxd0RZUGViK1MwNW1DWm13UktrU0k4ZEtmaGNzVUJFNVdWeWkxVnZoZ0dIcXh3eW13dFhsK1ZuaXhKYnhHUmhBS1I3a0dTQUE9PQo="
+      "url": "https://github.com/bpodol/landing/releases/download/v1.0.1/PLO-RangeLab_1.0.1_x64-setup.exe",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTmhBZ0gxdHdObjhvcnQrUnB3Yk9mcUlPVitqZUIyMFpEOWd6Q0s5MU5TUVE3a3AxcjU5Z2xyNVdWdTVaSm5sWC91bVY1SzcxcTlkT2FYaGxPYXM0d1pnNkFlOFpVVmdNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg5NTg2MTQ5CWZpbGU6UExPIFJhbmdlTGFiXzEuMC4xX3g2NC1zZXR1cC5leGUKOTBsaFpaa1J5cGdsV2RxVCt1K0JnTTk1blAwVklOWVNSQkorU0hYQXRMelk0M2g2ZzNMdTY1VC9hbW5acjlwMUZVN01jZzZsalZKaWdiNG1ObWVSQmc9PQo="
     }
   }
 }
