@@ -1,11 +1,11 @@
 {
-  "version": "1.0.3",
-  "notes": "Replaced the old Remove workflow\u2014where selected hands were simply deleted from the range\u2014with a Split/Move workflow that sends those selected hands into another action branch instead.",
-  "pub_date": "2026-09-17T00:24:53.621Z",
+  "version": "1.0.4",
+  "notes": "Added Flush/FD Blockers\nBetter error handling",
+  "pub_date": "2026-09-19T16:31:30.475Z",
   "platforms": {
     "windows-x86_64": {
-      "url": "https://github.com/bpodol/landing/releases/download/v1.0.3/PLO-RangeLab_1.0.3_x64-setup.exe",
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTmhBZ0gxdHdObnlwYUIzZWsrN2EyTXFZb3NGdHU0dkRNNTRudnBJVEV3R0ZUTm5OVGVWUWtUSUczZUJqVEsweDBmL2VlYkRtajdmaDY4QmFlWDVRMUxTZFBZTVFTOVF3PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg5NjA0NjkzCWZpbGU6UExPIFJhbmdlTGFiXzEuMC4zX3g2NC1zZXR1cC5leGUKRzlWVGd2RWhKc2c0NjI5TVFXUyt6Q2o3ZTFVZ1ZqbkNWajhZdXZWMU9XZlBaR2FCUkU1cjVQQWZPQVhvcWdEUDdRdHdqbmE1dEF1WWhrVXJYN0QxQmc9PQo="
+      "url": "https://github.com/bpodol/landing/releases/download/v1.0.4/PLO-RangeLab_1.0.4_x64-setup.exe",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTmhBZ0gxdHdObndJVndOWUREQ0RXREVFajFHOUJtMFhlMDhrdUZuanRxQ0xRaWgwQ3dZblZDLy9uMXRuSHU2SFNPSWhrM3FRUUJZVmJzcisrSERSNWNXN1ZkSmsxUmdRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg5ODM1NDkwCWZpbGU6UExPIFJhbmdlTGFiXzEuMC40X3g2NC1zZXR1cC5leGUKd2xndmpST3RySE0yK3EzMkFRb1M4N0FPVjhNQk1YTXIzZ1Y3QnpFNDZlSnU1VE13TEoyUkN1cVlLS040RlU2c3pRS2grT0xXR0FKd3FTVG9sMzNUQ3c9PQo="
     }
   }
 }
