@@ -1,5 +1,5 @@
 {
-  "version": "1.0.5",
-  "download": "https://github.com/bpodol/landing/releases/download/v1.0.5/PLO-RangeLab_1.0.5_x64-setup.exe",
+  "version": "1.0.6",
+  "download": "https://github.com/bpodol/landing/releases/download/v1.0.6/PLO-RangeLab_1.0.6_x64-setup.exe",
   "messages": "Added Flush/FD Blockers\nBetter error handling"
 }

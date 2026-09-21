@@ -1,11 +1,11 @@
 {
-  "version": "1.0.5",
+  "version": "1.0.6",
   "notes": "Added Flush/FD Blockers\nBetter error handling",
-  "pub_date": "2026-09-19T17:09:17.572Z",
+  "pub_date": "2026-09-21T01:45:08.401Z",
   "platforms": {
     "windows-x86_64": {
-      "url": "https://github.com/bpodol/landing/releases/download/v1.0.5/PLO-RangeLab_1.0.5_x64-setup.exe",
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTmhBZ0gxdHdObjl6Ni91R0F5SWF0SjAwaTdoalNidWlZZ3p1QkxMbHlteVpUcGtOQ3FWUkw1QXJjNGtkNzlkd1BEMjBpeTZMako4ZmtjSlB4bWpsekg0V0xrMHpuTndJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg5ODM3NzU3CWZpbGU6UExPIFJhbmdlTGFiXzEuMC41X3g2NC1zZXR1cC5leGUKVDBUTEQwM01vbHJnSUs4RXRBMGJGanYvNlB1b2FCelAzSlo4c2ZRRW02WE5ad25mMERldjNFd1FYMlBHdVJYZkJQdldDajRyalJqVzBoQ1ZUYmdwREE9PQo="
+      "url": "https://github.com/bpodol/landing/releases/download/v1.0.6/PLO-RangeLab_1.0.6_x64-setup.exe",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTmhBZ0gxdHdObjF6UnB0N0lFdFlHUUdNaWVabzgyR1BWeWh0N2U5UGVtR0tkaUs5TjIrR2c5a3RzTXRFeTVZOVp5Vi9pbFlUcmFFd2pjenljd011ZEVjTng3eHhqK2c4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg5OTU1MTA4CWZpbGU6UExPIFJhbmdlTGFiXzEuMC42X3g2NC1zZXR1cC5leGUKd1ZRb0JvMnlmTG85RDg4c1RMYXRiRzlsNjY4aVI5MVJRKzFBZk9BaTRJN0RRT3oxRzcyU1k0dHpmT2s3NExwSEhXZGR5dkNWSmRqWGg3aWdoRmYrRFE9PQo="
     }
   }
 }
