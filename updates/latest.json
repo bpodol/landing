@@ -1,11 +1,11 @@
 {
-  "version": "1.0.6",
-  "notes": "Added Flush/FD Blockers\nBetter error handling",
-  "pub_date": "2026-09-21T01:45:08.401Z",
+  "version": "1.0.7",
+  "notes": "Fixed stale input ranges for preflop equity",
+  "pub_date": "2026-09-23T12:41:20.112Z",
   "platforms": {
     "windows-x86_64": {
-      "url": "https://github.com/bpodol/landing/releases/download/v1.0.6/PLO-RangeLab_1.0.6_x64-setup.exe",
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTmhBZ0gxdHdObjF6UnB0N0lFdFlHUUdNaWVabzgyR1BWeWh0N2U5UGVtR0tkaUs5TjIrR2c5a3RzTXRFeTVZOVp5Vi9pbFlUcmFFd2pjenljd011ZEVjTng3eHhqK2c4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg5OTU1MTA4CWZpbGU6UExPIFJhbmdlTGFiXzEuMC42X3g2NC1zZXR1cC5leGUKd1ZRb0JvMnlmTG85RDg4c1RMYXRiRzlsNjY4aVI5MVJRKzFBZk9BaTRJN0RRT3oxRzcyU1k0dHpmT2s3NExwSEhXZGR5dkNWSmRqWGg3aWdoRmYrRFE9PQo="
+      "url": "https://github.com/bpodol/landing/releases/download/v1.0.7/PLO-RangeLab_1.0.7_x64-setup.exe",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTmhBZ0gxdHdObjN1YWlFWUk5MnpaTWcyNWJMUi94aWQrcHRGQ0gzY3hzanRjbTFMblduTjcxNW91V3hudGppTmVEN2FpbUlaeG82eVFBdGRaakxyR2tMVjB2ZEdFVWdRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkwMTY3Mjc5CWZpbGU6UExPIFJhbmdlTGFiXzEuMC43X3g2NC1zZXR1cC5leGUKUUFhQ0lKNWR3Ym1QY21aaDFZaU1uSjVROVg0MlpCSkVIODVtS0FRSFhIN005QjZQOVZQRWRPcjRYejFCY3JzUm1hS3dPb2J1KzBXVy8wR2oyUlNXQWc9PQo="
     }
   }
 }
