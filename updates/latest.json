@@ -1,11 +1,11 @@
 {
-  "version": "1.0.7",
-  "notes": "Fixed stale input ranges for preflop equity",
-  "pub_date": "2026-09-23T12:41:20.112Z",
+  "version": "1.0.8",
+  "notes": "Updated runouts equity visuals",
+  "pub_date": "2026-09-24T22:13:46.141Z",
   "platforms": {
     "windows-x86_64": {
-      "url": "https://github.com/bpodol/landing/releases/download/v1.0.7/PLO-RangeLab_1.0.7_x64-setup.exe",
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTmhBZ0gxdHdObjN1YWlFWUk5MnpaTWcyNWJMUi94aWQrcHRGQ0gzY3hzanRjbTFMblduTjcxNW91V3hudGppTmVEN2FpbUlaeG82eVFBdGRaakxyR2tMVjB2ZEdFVWdRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkwMTY3Mjc5CWZpbGU6UExPIFJhbmdlTGFiXzEuMC43X3g2NC1zZXR1cC5leGUKUUFhQ0lKNWR3Ym1QY21aaDFZaU1uSjVROVg0MlpCSkVIODVtS0FRSFhIN005QjZQOVZQRWRPcjRYejFCY3JzUm1hS3dPb2J1KzBXVy8wR2oyUlNXQWc9PQo="
+      "url": "https://github.com/bpodol/landing/releases/download/v1.0.8/PLO-RangeLab_1.0.8_x64-setup.exe",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTmhBZ0gxdHdObjZUMG5ydmRDaS8rdy9Fb0hCUTl3Q0VuZ0ZLQWJ0anE3MXZlUlFFYWQ0WWJuUnNTVmlKL0ZjZFVIM2RScXh5d0Z5WXorMzkxeWVHYUFma01PNU5wcndZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkwMjg4MDI1CWZpbGU6UExPIFJhbmdlTGFiXzEuMC44X3g2NC1zZXR1cC5leGUKUWdkT3dYc0NrMG44Zk9oZC9RSGx1eHdJdkdSb2x3cGJrQkVSTCtoK1FjeVM3N1F5ZUxuc1FXeWZjVUVsNS8zdWJxTUkzcEl6TlNaSEZOaXhNSFVDRGc9PQo="
     }
   }
 }
