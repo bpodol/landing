@@ -1,11 +1,11 @@
 {
-  "version": "1.0.9",
+  "version": "1.1.0",
   "notes": "Updated runouts equity visuals",
-  "pub_date": "2026-09-28T13:09:05.619Z",
+  "pub_date": "2026-09-28T13:25:50.179Z",
   "platforms": {
     "windows-x86_64": {
-      "url": "https://github.com/bpodol/landing/releases/download/v1.0.9/PLO-RangeLab_1.0.9_x64-setup.exe",
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTmhBZ0gxdHdObjV4cGhsRlNOcGorSGtvUVZKRDF4SFFRWHlDKzg2dDFRaWlLZUJyc2V1aVhYNnBiaUQzaVBGSlBUVVZHV1hKSmQzZHhZWk5rSnR1WHFXdVNlQjZaZWc4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkwNjAwOTQ1CWZpbGU6UExPIFJhbmdlTGFiXzEuMC45X3g2NC1zZXR1cC5leGUKQnlOUlFFSHdSS3FSc3lqU1o0eHgxVm80Y0o4TTlVK0s5THlZbVhlaGQ1ekwzMVRTMG14QTJZdys0TC8rWDlHdjRpZjlMZVJvKzZsK3d2eDZIVkIvQVE9PQo="
+      "url": "https://github.com/bpodol/landing/releases/download/v1.1.0/PLO-RangeLab_1.1.0_x64-setup.exe",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRTmhBZ0gxdHdObi9zQTRHS3NjQ2dKbEFleGRYTXRRSnNLQjdPZ29BaFNaQjR3NFlNRDVtSUVkb1VxaGRmdXYvVEUrQmJ4bVBKVWpRTy9sVnBXTzMzQ0ErckJDTHp3T2c4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkwNjAxOTQ5CWZpbGU6UExPIFJhbmdlTGFiXzEuMS4wX3g2NC1zZXR1cC5leGUKc0srTy8vZ2VodGphLzV3WVdSTFU3Vm5KdjJUNERxNjYzTzNmRmRydE0wYnYvRVZuTE5HRS9RMk8rd2NVck9QbGhHSkdWUm9oaFh6c1RKQkN3RlMxQ2c9PQo="
     }
   }
 }
